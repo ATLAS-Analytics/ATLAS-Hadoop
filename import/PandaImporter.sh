@@ -17,4 +17,4 @@ sqoop job --exec JOBSSTATUSimport
 echo "importing panda log table"
 sdate=$(date --date="2 days ago" +%d-%b-%Y)
 edate=$(date --date="1 days ago" +%d-%b-%Y)
-sqoop import --connect "jdbc:oracle:thin:@//itrac5101-v.cern.ch:10121/adcr.cern.ch" --table ATLAS_PANDA.PANDALOG --username ATLAS_PANDABIGMON --P --as-avrodatafile --target-dir /atlas/analytics/panda/PandaLog --columns NAME,MODULE,LOGUSER,TYPE,PID,LOGLEVEL,LEVELNAME,TIME,FILENAME,LINE,MESSAGE,BINTIME --where "BINTIME>'${sdate}' and BINTIME<='${edate}'" -m 1 --append
+sqoop import --connect "jdbc:oracle:thin:@//adcr1-adg-s.cern.ch:10121/adcr.cern.ch" --table ATLAS_PANDA.PANDALOG --username ATLAS_PANDABIGMON --P --as-avrodatafile --target-dir /atlas/analytics/panda/PandaLog --columns NAME,MODULE,LOGUSER,TYPE,PID,LOGLEVEL,LEVELNAME,TIME,FILENAME,LINE,MESSAGE,BINTIME --where "BINTIME>'${sdate}' and BINTIME<='${edate}'" -m 1 --append
