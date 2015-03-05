@@ -18,9 +18,6 @@ for fl in cat.stdout:
     f=fl.split()
     fn.append(f[7])
 
-ct=datetime.datetime.now()
-toImport=ct-datetime.timedelta(days=4)
-print 'importing from day: ',toImport
 
 for f in fn:
     print f
@@ -34,8 +31,6 @@ for f in fn:
             continue
         nr={}
         nr['dat']=int(w[0])
-        if nr['dat'] != toImport.year*10000+toImport.month*100+toImport.day:
-            continue
         nr['sou']=w[1]
         nr['des']=w[2]
         if w[3]=='finished': nr['sta']=0
@@ -53,7 +48,7 @@ try:
     opener = urllib2.build_opener()
     f = opener.open(req,timeout=50)
     res=f.read()
-    print res
+    print 'uploaded:',res
     f.close()
 except:
     print "# Can't upload to GAE", sys.exc_info()[0]

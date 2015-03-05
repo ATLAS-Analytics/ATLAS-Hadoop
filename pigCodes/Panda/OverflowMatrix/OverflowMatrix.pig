@@ -34,9 +34,8 @@ store P into 'results/Panda/OverflowMatrix/Overflows/jobs.$INPD';
 
 JOBS = LOAD 'results/Panda/OverflowMatrix/Overflows/jobs.$INPD' as (MODIFICATIONTIME:long, JOBSTATUS:chararray,  STARTTIME:long, ENDTIME:long, COMPUTINGSITE:chararray, DESTINATIONSE:chararray, CLOUD:chararray, SOURCE:chararray, DESTINATIONSITE:chararray,  PILOTERRORCODE:int, NINPUTFILES:int, WALLTIME:long, WAITTIME:long);
 
-FJOB = foreach JOBS { MT=ToDate(MODIFICATIONTIME); CT=CurrentTime(); ind=INDEXOF(SOURCE,'_',0); GENERATE GetYear(MT)*10000 + GetMonth(MT)*100 + GetDay(MT) as MODT, JOBSTATUS, (ind>1?SUBSTRING(SOURCE,0,ind):SOURCE) as SOURCESITE, COMPUTINGSITE, PILOTERRORCODE,  DaysBetween(CT,MT) as daysAgo;};
+JOB = foreach JOBS { MT=ToDate(MODIFICATIONTIME); ind=INDEXOF(SOURCE,'_',0); GENERATE GetYear(MT)*10000 + GetMonth(MT)*100 + GetDay(MT) as MODT, JOBSTATUS, (ind>1?SUBSTRING(SOURCE,0,ind):SOURCE) as SOURCESITE, COMPUTINGSITE, PILOTERRORCODE;};
 
-JOB = filter FJOB by daysAgo<7L;
 
 gJO = GROUP JOB by (MODT, SOURCESITE, COMPUTINGSITE, JOBSTATUS);
 nJobs = FOREACH gJO GENERATE group, COUNT(JOB.MODT);
