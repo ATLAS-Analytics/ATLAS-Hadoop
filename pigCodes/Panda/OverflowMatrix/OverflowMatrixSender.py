@@ -39,7 +39,7 @@ for f in fn:
         nr['cou']=int(w[4])
         data.append(nr)
 
-print data 
+print 'uploading - ',data 
 
 json_data = json.dumps(data)
 
@@ -48,7 +48,6 @@ try:
     opener = urllib2.build_opener()
     f = opener.open(req,timeout=50)
     res=f.read()
-    print 'uploaded:',res
     f.close()
 except:
     print "# Can't upload to GAE", sys.exc_info()[0]
