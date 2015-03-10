@@ -29,11 +29,15 @@ PA = filter PAN by COMPUTINGSITE=='ANALY_AGLT2_SL6' or COMPUTINGSITE=='ANALY_MWT
 
 P = foreach PA { ind=INDEXOF(JOBNAME,'.',0); generate TRANSFERTYPE, JOBSTATUS, COMPUTINGSITE, REPLACE(SOURCESITE,'ANALY_','') as SOURCE, INPUTFILETYPE, SUBSTRING(JOBNAME, 0, ind) as SCOPE, FLATTEN(STRSPLIT(PILOTTIMING, '\\u007C')) as (timeGetJob:chararray, timeStageIn:chararray,timeExe:chararray,timeStageOut:chararray,timeCleanUp:chararray); };
 
-
+-- what are job efficiencies per source, destination
 jobEffGroup = GROUP P BY (TRANSFERTYPE,COMPUTINGSITE, SOURCE, JOBSTATUS );
 jeg = FOREACH jobEffGroup GENERATE group, COUNT(P.JOBSTATUS);
---dump jeg;
+dump jeg;
 
+-- what is distribution by InputFileType ?
+jobITGroup = GROUP P BY (TRANSFERTYPE,COMPUTINGSITE, SOURCE, INPUTFILETYPE );
+jig = FOREACH jobITGroup GENERATE group, COUNT(P.JOBSTATUS);
+dump jig;
 
 P1 = foreach P generate TRANSFERTYPE,COMPUTINGSITE, SOURCE, JOBSTATUS, (int)timeGetJob, (int) timeStageIn,(int)timeExe,(int)timeStageOut,(int)timeCleanUp;
 
