@@ -20,8 +20,8 @@ REGISTER 'myudfs.py' using jython as myfuncs;
 
 AJOBS = LOAD '/atlas/analytics/panda/JOBS_STATUSLOG' USING AvroStorage();
 
-JOBS = filter AJOBS by MODIFICATIONTIME>1388534400000L;
+JOBS = filter AJOBS by COMPUTINGSITE=='ANALY_MWT2_SL6' and MODIFICATIONTIME>1388534400000L; // 2014.1.1
 
-grJ = group JOBS by (PANDAID,CLOUD,COMPUTINGSITE,PRODSOURCELABEL);
-gJOBS = foreach grJ { generate FLATTEN(group) as (PANDAID,CLOUD,COMPUTINGSITE,PRODSOURCELABEL), myfuncs.OnlyStates(JOBS); };
+grJ = group JOBS by (PANDAID,COMPUTINGSITE,PRODSOURCELABEL);
+gJOBS = foreach grJ { generate FLATTEN(group) as (PANDAID,COMPUTINGSITE,PRODSOURCELABEL), myfuncs.OnlyStates(JOBS); };
 STORE gJOBS into '/atlas/analytics/panda/intermediate/JOBS_STATUSLOG/ReshuffleFlow';

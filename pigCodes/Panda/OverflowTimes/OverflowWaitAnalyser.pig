@@ -4,13 +4,6 @@
 -- average time till running (from the moment of submission)
 -- all of it grouped by TransferType, ComputingSite and JobsStatus
 
--- t1 = timeGetJob   # set in pilot.py
--- t2 = timeStageIn  # set in runJob.py
--- t3 = timeExe      # set in runJob.py
--- t4 = timeStageOut # set in runJob.py (and in pilot.py moveLostOutputFiles() for recovered jobs)
--- t5 = timeCleanUp  # set in this function
-
-
 REGISTER '/usr/lib/pig/piggybank.jar' ;
 
 -- regular jars
@@ -21,35 +14,35 @@ REGISTER '/usr/lib/pig/lib/jython-*.jar';
 REGISTER '/usr/lib/pig/lib/snappy-*.jar';
 
 
+REGISTER 'myudfs.py' using jython as myfuncs;
+
 PAN = LOAD '/atlas/analytics/panda/JOBSARCHIVED/jobs.2015-03-1*' USING AvroStorage();
-DESCRIBE PAN;
+PA = filter PAN by COMPUTINGSITE=='ANALY_MWT2_SL6' and JOBSTATUS=='finished';
+P = foreach PA generate (long)PANDAID, TRANSFERTYPE,(long)MODIFICATIONTIME, JOBSTATUS,  STARTTIME, ENDTIME, COMPUTINGSITE, DESTINATIONSE, (int)ATTEMPTNR, REPLACE(SOURCESITE,'ANALY_','') as SOURCE, DESTINATIONSITE, (int)PILOTERRORCODE, (long)INPUTFILEBYTES, (long)CPUCONSUMPTIONTIME,  ENDTIME - STARTTIME as WALLTIME, STARTTIME - CREATIONTIME as WAITTIME;
+
+FLOW = LOAD 'MWT2overflows' as (PANDAID:long, COMPUTINGSITE:chararray, PRODSOURCELABEL:chararray, times:bag{tuple(state:chararray, time:long)});
+
+X = JOIN P by PANDAID, FLOW by PANDAID;
+--L = LIMIT X 100; dump L;
+
+-- here I have to go through times bag of X, and using a UDF calculate time differences. 
+REC = foreach X generate P::PANDAID, P::TRANSFERTYPE, P::JOBSTATUS, P::ATTEMPTNR, WAITTIME/1000 as OWAIT, FLATTEN(myfuncs.AllTheTimes(times)); 
+L = LIMIT REC 1000; dump L;
+
+grAv = GROUP REC BY(P::TRANSFERTYPE, calc::SKIP);
+avints = FOREACH grAv GENERATE group, COUNT(REC.P::JOBSTATUS), AVG(REC.OWAIT), AVG(REC.calc::inPending), AVG(REC.calc::inDefined), AVG(REC.calc::inActivated), AVG(REC.calc::inSent), AVG(REC.calc::inStarting), AVG(REC.calc::inRunning), AVG(REC.calc::inHolding);
+dump avints;
+
+--SKIPS = filter REC by calc::SKIP==1 and TRANSFERTYPE=='fax';
+--dump SKIPS;
+
+WAITH = filter REC by calc::SKIP!=0 and TRANSFERTYPE is null;
+WAITB = foreach WAITH generate OWAIT, OWAIT/300 as bin;
+WG = group WAITB by bin;
+WH = foreach WG generate group, COUNT(WAITB.bin);
+dump WH;
 
 
-PA = filter PAN by COMPUTINGSITE=='ANALY_AGLT2_SL6' or COMPUTINGSITE=='ANALY_MWT2_SL6' or COMPUTINGSITE=='ANALY_BNL_SHORT' or COMPUTINGSITE=='ANALY_BNL_LONG' or COMPUTINGSITE=='ANALY_SFU' or COMPUTINGSITE=='ANALY_SLAC';
-
-P = foreach PA { ind=INDEXOF(JOBNAME,'.',0); generate TRANSFERTYPE, JOBSTATUS, COMPUTINGSITE, REPLACE(SOURCESITE,'ANALY_','') as SOURCE, INPUTFILETYPE, SUBSTRING(JOBNAME, 0, ind) as SCOPE, FLATTEN(STRSPLIT(PILOTTIMING, '\\u007C')) as (timeGetJob:chararray, timeStageIn:chararray,timeExe:chararray,timeStageOut:chararray,timeCleanUp:chararray); };
-
--- what are job efficiencies per source, destination
-jobEffGroup = GROUP P BY (TRANSFERTYPE,COMPUTINGSITE, SOURCE, JOBSTATUS );
-jeg = FOREACH jobEffGroup GENERATE group, COUNT(P.JOBSTATUS);
-dump jeg;
-
--- what is distribution by InputFileType ?
-jobITGroup = GROUP P BY (TRANSFERTYPE,COMPUTINGSITE, SOURCE, INPUTFILETYPE );
-jig = FOREACH jobITGroup GENERATE group, COUNT(P.JOBSTATUS);
-dump jig;
-
-P1 = foreach P generate TRANSFERTYPE,COMPUTINGSITE, SOURCE, JOBSTATUS, (int)timeGetJob, (int) timeStageIn,(int)timeExe,(int)timeStageOut,(int)timeCleanUp;
-
-jobTimeGroup = GROUP P1 BY (TRANSFERTYPE,COMPUTINGSITE, SOURCE, JOBSTATUS );
-jtg = FOREACH jobTimeGroup GENERATE group, AVG(P1.timeGetJob),AVG(P1.timeStageIn),AVG(P1.timeExe),AVG(P1.timeStageOut),AVG(P1.timeCleanUp);
-dump jtg;
-
-
---L = LIMIT P 5000; dump L;
-
-
--- PILOTTIMING, INPUTFILETYPE, JOBNAME
 
 -- personal jars - newest versions
 -- REGISTER '/afs/cern.ch/user/i/ivukotic/hadoop/software/avro-1.7.7.jar';
