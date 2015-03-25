@@ -22,6 +22,6 @@ AJOBS = LOAD '/atlas/analytics/panda/JOBS_STATUSLOG/2015-03/' USING AvroStorage(
 
 JOBS = filter AJOBS by COMPUTINGSITE=='ANALY_MWT2_SL6' and MODIFICATIONTIME>1388534400000L; // 2014.1.1
 
-grJ = group JOBS by (PANDAID,COMPUTINGSITE,PRODSOURCELABEL);
-gJOBS = foreach grJ { generate FLATTEN(group) as (PANDAID,COMPUTINGSITE,PRODSOURCELABEL), myfuncs.BagToBag(JOBS); };
+grJ = group JOBS by (PANDAID, CLOUD, COMPUTINGSITE, PRODSOURCELABEL);
+gJOBS = foreach grJ { generate FLATTEN(group) as (PANDAID,CLOUD,COMPUTINGSITE,PRODSOURCELABEL), myfuncs.BagToBag(JOBS); };
 STORE gJOBS into '/atlas/analytics/panda/intermediate/JOBS_STATUSLOG/Reshuffle';
