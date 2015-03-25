@@ -10,11 +10,15 @@ DEFINE UnixToISO org.apache.pig.piggybank.evaluation.datetime.convert.UnixToISO(
 
 Register 'myudfs.py' using jython as myfuncs;
 
-RAWJOBS = LOAD '/atlas/analytics/panda/intermediate/JOBS_STATUSLOG/ReshuffleFlow' as (PANDAID:long, CLOUD:chararray, COMPUTINGSITE:chararray, PRODSOURCELABEL:chararray, STATES:bag{(state:chararray)});
+RAWJOBS = LOAD '/atlas/analytics/panda/intermediate/JOBS_STATUSLOG/ReshuffleFlow' as (PANDAID:long, COMPUTINGSITE:chararray, PRODSOURCELABEL:chararray, STATES:bag{(state:chararray)});
 
-CJOBS = filter RAWJOBS by PRODSOURCELABEL=='managed'; 
+--CJOBS = filter RAWJOBS by PRODSOURCELABEL=='managed'; 
 
-JOBS = foreach CJOBS generate COMPUTINGSITE, PRODSOURCELABEL, BagToString(STATES,' ') as path:chararray;
+JOBS = foreach RAWJOBS generate COMPUTINGSITE, PANDAID, PRODSOURCELABEL, BagToString(STATES,' ') as path:chararray;
+
+SAMP = filter JOBS by path=='pending defined activated';
+L = LIMIT SAMP 100;
+dump L;
 
 grPerRes = group JOBS by path;
 PATHS = foreach grPerRes generate group, COUNT(JOBS.COMPUTINGSITE) as appearances:long;
@@ -22,7 +26,6 @@ STORE PATHS into 'results/Panda/statesFlow/PATHS-managed.csv' USING CSVExcelStor
 
 FREQUENT = filter PATHS by appearances>1000;
 dump FREQUENT;
-
 
 
 
