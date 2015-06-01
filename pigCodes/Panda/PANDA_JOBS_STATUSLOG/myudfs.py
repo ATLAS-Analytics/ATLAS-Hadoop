@@ -58,6 +58,14 @@ def Skipped(bag):
         return(1)
     else:
         return(0)
+        
+@outputSchema('TIMESTAMP:long')
+def Tstamp(bag):
+    if bag is None:
+        return(0)
+    else:
+        for JOBSTATUS, t  in bag:
+            return(t)
 
 @outputSchema('SORT:int')
 def Sorted(bag):
@@ -70,7 +78,6 @@ def Sorted(bag):
         minTime=t
     return SORTED
 
-# @outputSchema("calc:tuple(SORTED:int,SKIP:int,inPending:long,inDefined:long,inActivated:long,inSent:long,inStarting:long,inRunning:long,inHolding:long,inMerging:long)")
 @outputSchema('intervals:bag{i:(status:chararray, time:long)}')
 def AllTheTimes(bag):
 

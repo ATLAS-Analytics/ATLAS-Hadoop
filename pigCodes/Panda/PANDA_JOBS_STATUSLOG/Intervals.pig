@@ -11,7 +11,7 @@ REGISTER 'myudfs.py' using jython as myfuncs;
 
 JOBS = LOAD '/atlas/analytics/panda/intermediate/JOBS_STATUSLOG/Reshuffle' as (PANDAID:long, CLOUD:chararray, COMPUTINGSITE:chararray, PRODSOURCELABEL:chararray, times:bag{tuple(state:chararray, time:long)});
 
-JOBInts = foreach JOBS  generate PANDAID, CLOUD, COMPUTINGSITE, PRODSOURCELABEL, myfuncs.AllTheTimes(times), myfuncs.Skipped(times), myfuncs.Sorted(times) ;
+JOBInts = foreach JOBS  generate myfuncs.Tstamp(times), PANDAID, CLOUD, COMPUTINGSITE, PRODSOURCELABEL, myfuncs.AllTheTimes(times), myfuncs.Skipped(times), myfuncs.Sorted(times) ;
 --L = LIMIT JOBInts 100; dump L;
 
 STORE JOBInts into '/atlas/analytics/panda/intermediate/JOBS_STATUSLOG/Intervals';
