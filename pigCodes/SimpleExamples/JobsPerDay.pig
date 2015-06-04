@@ -1,4 +1,4 @@
--- this simple example filters records to select only onese between to dates
+-- this simple example filters records to select only onese between two dates
 -- subtracts values of two columns
 -- calculates average of the difference.
 
@@ -8,35 +8,36 @@
 -- output will be in a lot of very small files. to get output localy download it like this
 -- hdfs dfs -getmerge waitGperDay.csv waitGperDay.csv
 
-
+-- if there was previous result, remove it.
 rmf JobsPerDay.csv; 
-register '/usr/lib/pig/piggybank.jar' ;
-DEFINE CSVLoader org.apache.pig.piggybank.storage.CSVLoader();
-DEFINE CSVExcelStorage org.apache.pig.piggybank.storage.CSVExcelStorage();
-PAN = LOAD '/user/ivukotic/Panda' USING CSVLoader as (
-PANDAID:long, MODIFICATIONTIME:long, JOBDEFINITIONID:long, SCHEDULERID:chararray, PILOTID:chararray, CREATIONTIME:long, CREATIONHOST:chararray, 
-MODIFICATIONHOST:chararray, ATLASRELEASE:chararray, TRANSFORMATION:chararray, HOMEPACKAGE:chararray, PRODSERIESLABEL:chararray, 
-PRODSOURCELABEL:chararray, PRODUSERID:chararray, ASSIGNEDPRIORITY:long, CURRENTPRIORITY:long, ATTEMPTNR:int, MAXATTEMPT:int, JOBSTATUS:chararray, 
-JOBNAME:chararray, MAXCPUCOUNT:long, MAXCPUUNIT:chararray, MAXDISKCOUNT:long, MAXDISKUNIT:chararray, IPCONNECTIVITY:chararray, MINRAMCOUNT:long, 
-MINRAMUNIT:chararray, STARTTIME:long, ENDTIME:long, CPUCONSUMPTIONTIME:long, CPUCONSUMPTIONUNIT:chararray, COMMANDTOPILOT:chararray, 
-TRANSEXITCODE:chararray, PILOTERRORCODE::int, PILOTERRORDIAG:chararray, EXEERRORCODE:int, EXEERRORDIAG:chararray, SUPERRORCODE:int, 
-SUPERRORDIAG:chararray, DDMERRORCODE:int, DDMERRORDIAG:chararray, BROKERAGEERRORCODE:int, BROKERAGEERRORDIAG:chararray, JOBDISPATCHERERRORCODE:int, 
-JOBDISPATCHERERRORDIAG:chararray, TASKBUFFERERRORCODE:int, TASKBUFFERERRORDIAG:chararray, COMPUTINGSITE:chararray, COMPUTINGELEMENT:chararray, 
-PRODDBLOCK:chararray, DISPATCHDBLOCK:chararray, DESTINATIONDBLOCK:chararray, DESTINATIONSE:chararray, NEVENTS:long, GRID:chararray, CLOUD:chararray, 
-CPUCONVERSION:float, SOURCESITE:chararray, DESTINATIONSITE:chararray, TRANSFERTYPE:chararray, TASKID:long, CMTCONFIG:chararray, STATECHANGETIME:long, 
-PRODDBUPDATETIME:long, LOCKEDBY:chararray, RELOCATIONFLAG:int, JOBEXECUTIONID:long, VO:chararray, PILOTTIMING:chararray, WORKINGGROUP:chararray, 
-PROCESSINGTYPE:chararray, PRODUSERNAME:chararray, NINPUTFILES:int, COUNTRYGROUP:chararray, BATCHID:chararray, PARENTID:long, SPECIALHANDLING:chararray, 
-JOBSETID:long,CORECOUNT:int, NINPUTDATAFILES:int, INPUTFILETYPE:chararray, INPUTFILEPROJECT:chararray, INPUTFILEBYTES:long, NOUTPUTDATAFILES:int,OUTPUTFILEBYTES:long);
+rmf JobsForTheDay.csv;
 
+-- registering libraries we will need
+REGISTER '/usr/lib/pig/piggybank.jar' ;
+REGISTER '/usr/lib/pig/lib/avro-*.jar';
+
+-- these are shortcuts
+--DEFINE CSVLoader org.apache.pig.piggybank.storage.CSVLoader();
+DEFINE CSVExcelStorage org.apache.pig.piggybank.storage.CSVExcelStorage();
+
+-- load data from middle 10 days of May 2015
+PAN = LOAD '/atlas/analytics/panda/JOBSARCHIVED/jobs.2015-05/jobs.2015-05-1*' USING AvroStorage();
+
+-- to see all the columns defined.
+DESCRIBE PAN;
 
 -- grouping per day 
 CLEAN = FILTER PAN BY MODIFICATIONTIME is not null;
-F3 = foreach CLEAN generate DaysBetween(ToDate(MODIFICATIONTIME*1000),ToDate(1388534400000L)) as day, PANDAID, MODIFICATIONTIME as MT;
-F4 = FILTER F3 by day==194;
---dump F4.PANDAID;
-store F4 into 'JobsForTheDay.csv' USING CSVExcelStorage(',', 'NO_MULTILINE');
---GperDay = group F3 by day;
---JobsPerDay = foreach GperDay generate group, COUNT(F3.MT);
---dump JobsPerDay;
---store JobsPerDay into 'JobsPerDay.csv' USING CSVExcelStorage(',', 'NO_MULTILINE');
+F3 = foreach CLEAN generate DaysBetween(ToDate(MODIFICATIONTIME),ToDate(1388534400000L)) as day, PANDAID, MODIFICATIONTIME as MT;
+
+GperDay = group F3 by day;
+JobsPerDay = foreach GperDay generate group, COUNT(F3.MT);
+dump JobsPerDay;
+store JobsPerDay into 'JobsPerDay.csv' USING CSVExcelStorage(',', 'NO_MULTILINE');
+
+-- F4 = FILTER F3 by day==138;
+-- dump F4.PANDAID;
+-- store F4 into 'JobsForTheDay.csv' USING CSVExcelStorage(',', 'NO_MULTILINE');
+
+
 
