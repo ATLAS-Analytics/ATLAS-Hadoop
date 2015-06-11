@@ -1,14 +1,17 @@
 -- remove results directory 
 rmf results/Panda/statesFlow/
+
 -- this code derives how long a job stays in different states.
 -- job states are described here: https://twiki.cern.ch/twiki/bin/view/PanDA/PandaShiftGuide#Job_state_definitions_in_Panda
 
-register '/usr/lib/pig/piggybank.jar' ;
+REGISTER '/usr/lib/pig/piggybank.jar' ;
+
+REGISTER 'myudfs.py' using jython as myfuncs;
+
 DEFINE CSVExcelStorage org.apache.pig.piggybank.storage.CSVExcelStorage();
 DEFINE CustomFormatToISO org.apache.pig.piggybank.evaluation.datetime.convert.CustomFormatToISO();
 DEFINE UnixToISO org.apache.pig.piggybank.evaluation.datetime.convert.UnixToISO();
 
-Register 'myudfs.py' using jython as myfuncs;
 
 RAWJOBS = LOAD '/atlas/analytics/panda/intermediate/JOBS_STATUSLOG/ReshuffleFlow' as (PANDAID:long, COMPUTINGSITE:chararray, PRODSOURCELABEL:chararray, STATES:bag{(state:chararray)});
 
