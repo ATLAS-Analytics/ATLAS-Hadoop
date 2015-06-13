@@ -6,7 +6,7 @@ def deriveTimes(origString):
 @outputSchema('tuple( walltime:int, cpueff:float, queue_time:int)')
 def deriveDurationAndCPUeff(CREATIONTIME,STARTTIME,ENDTIME,CPUCONSUMPTIONTIME):
     walltime=ENDTIME-STARTTIME
-    if walltime>0: 
+    if walltime>0 and CPUCONSUMPTIONTIME!='': 
         cpueff = int(CPUCONSUMPTIONTIME)/walltime
     else:
         cpueff = 0
