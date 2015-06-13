@@ -19,3 +19,9 @@ def deriveDurationAndCPUeff(CREATIONTIME,STARTTIME,ENDTIME,CPUCONSUMPTIONTIME):
     queue_time  =STARTTIME-CREATIONTIME
     return (walltime,cpueff,queue_time)
     
+@outputSchema('TIMESTAMP:chararray')
+def Tstamp(ts):
+    if ts is None:
+        return(0)
+    else:
+        return(datetime.fromtimestamp(t/1000).isoformat())
