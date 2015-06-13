@@ -7,7 +7,7 @@ def deriveTimes(origString):
 def deriveDurationAndCPUeff(CREATIONTIME,STARTTIME,ENDTIME,CPUCONSUMPTIONTIME):
     walltime=ENDTIME-STARTTIME
     if walltime>0: 
-        cpueff = CPUCONSUMPTIONTIME/walltime
+        cpueff = int(CPUCONSUMPTIONTIME)/walltime
     else:
         cpueff = 0
     queue_time=STARTTIME-CREATIONTIME
