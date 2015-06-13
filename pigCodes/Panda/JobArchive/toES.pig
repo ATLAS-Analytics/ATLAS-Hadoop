@@ -15,4 +15,4 @@ DESCRIBE PAN;
 
 --L = LIMIT JOBS 10000; dump L;
 
-STORE PAN INTO 'JobArchive/data-$INPD' USING EsStorage();
+STORE PAN INTO 'job_archive/data-$INPD' USING EsStorage();
