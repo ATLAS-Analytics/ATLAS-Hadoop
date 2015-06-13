@@ -1,3 +1,5 @@
+from datetime import datetime
+
 @outputSchema('tuple( timeGetJob:int, timeStageIn:int, timeExe:int, timeStageOut:int, timeSetup:int)')
 def deriveTimes(origString):
     if origString is None:
