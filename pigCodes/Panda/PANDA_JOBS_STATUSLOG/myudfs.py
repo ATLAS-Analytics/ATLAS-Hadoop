@@ -123,35 +123,15 @@ def TheTimes(bag):
         else:
             inState[st[i]]=ti[i+1]-ti[i]
             
-    for i in inState:
-        switch(i):
-            case('pending'):
-                inPending=inState[i]/1000
-                break
-            case('defined'):
-                inDefined=inState[i]/1000
-                break
-            case('activated'):
-                inActivated=inState[i]/1000
-                break            
-            case('sent'):
-                inSent=inState[i]/1000
-                break
-            case('starting'):
-                inStarting=inState[i]/1000
-                break
-            case('running'):
-                inRunning=inState[i]/1000
-                break
-            case('holding'):
-                inHolding=inState[i]/1000
-                break
-            case('merging'):
-                inMerging=inState[i]/1000
-                break
-            default:
-                print "something strange happened!"
-                break
+    if 'pending' in inState:  inPending=inState['pending']/1000
+    if 'defined'in inState:   inDefined=inState['defined']/1000
+    if 'activated'in inState: inActivated=inState['activated']/1000
+    if 'sent'in inState:      inSent=inState['sent']/1000
+    if 'starting'in inState:  inStarting=inState['starting']/1000
+    if 'running'in inState:   inRunning=inState['running']/1000
+    if 'holding'in inState:   inHolding=inState['holding']/1000
+    if 'merging'in inState:   inMerging=inState['merging']/1000
+         
                 
     return (inPending, inDefined, inActivated, inSent, inStarting, inRunning, inHolding, inMerging)
 
