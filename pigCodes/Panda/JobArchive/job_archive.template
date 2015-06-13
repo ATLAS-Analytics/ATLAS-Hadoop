@@ -1,0 +1,128 @@
+curl -XPOST 'http://aianalytics01.cern.ch:9200/_template/jobarchive' -d '{
+    "template" : "jobdata*",
+    "settings" : {
+        "number_of_shards" : 3,
+        "number_of_replicas" : 1
+    },
+    "mappings" : {
+        "jobdata" : {
+            "_source" : { "enabled" : true },
+            "properties" : {
+                "ATLASRELEASE" : { "type" : "string", "index" : "not_analyzed" },
+                "CLOUD" : { "type" : "string", "index" : "not_analyzed" },
+                "CMTCONFIG" : { "type" : "string", "index" : "not_analyzed" },
+                "COMMANDTOPILOT" : { "type" : "string", "index" : "not_analyzed" },
+                "COMPUTINGELEMENT" : { "type" : "string", "index" : "not_analyzed" },
+                "COMPUTINGSITE" : { "type" : "string", "index" : "not_analyzed" },
+                "COUNTRYGROUP" : { "type" : "string", "index" : "not_analyzed" },
+                "CPUCONSUMPTIONUNIT" : { "type" : "string", "index" : "not_analyzed" },
+                "CPUCONVERSION" : { "type" : "string", "index" : "not_analyzed" },
+                "CREATIONHOST" : { "type" : "string", "index" : "not_analyzed" },
+                "DDMERRORDIAG" : { "type" : "string", "index" : "not_analyzed" },
+                "DESTINATIONDBLOCK" : { "type" : "string", "index" : "not_analyzed"},
+                "DESTINATIONSE" : { "type" : "string", "index" : "not_analyzed" },
+                "DISPATCHDBLOCK" : { "type" : "string", "index" : "not_analyzed" },
+                "EXEERRORDIAG" : { "type" : "string", "index" : "not_analyzed" },
+                "HOMEPACKAGE" : { "type" : "string", "index" : "not_analyzed" },
+                "INPUTFILEPROJECT" : { "type" : "string", "index" : "not_analyzed"},
+                "INPUTFILETYPE" : { "type" : "string", "index" : "not_analyzed"},
+                "IPCONNECTIVITY" : { "type" : "string", "index" : "not_analyzed"},
+                "JOBDISPATCHERERRORDIAG" : { "type" : "string", "index" : "not_analyzed" },
+                "JOBNAME" : { "type" : "string", "index" : "not_analyzed" },
+                "JOBSTATUS" : { "type" : "string", "index" : "not_analyzed" },
+                "LOCKEDBY" : { "type" : "string", "index" : "not_analyzed" },
+                "MAXCPUUNIT" : { "type" : "string", "index" : "not_analyzed" },
+                "MODIFICATIONHOST" : { "type" : "string", "index" : "not_analyzed" },
+                "PARENTID" : { "type" : "string", "index" : "not_analyzed" },
+                "PILOTERRORDIAG" : { "type" : "string", "index" : "not_analyzed" },
+                "PILOTID" : { "type" : "string", "index" : "not_analyzed" },
+                "PILOTTIMING" : { "type" : "string", "index" : "not_analyzed" },
+                "PROCESSINGTYPE" : { "type" : "string", "index" : "not_analyzed" },
+                "PRODDBLOCK" : { "type" : "string", "index" : "not_analyzed" },
+                "PRODSERIESLABEL" : { "type" : "string", "index" : "not_analyzed" },
+                "PRODSOURCELABEL" : { "type" : "string", "index" : "not_analyzed" },
+                "PRODUSERID" : { "type" : "string", "index" : "not_analyzed" },
+                "PRODUSERNAME" : { "type" : "string", "index" : "not_analyzed" },
+                "RELOCATIONFLAG" : { "type" : "string", "index" : "not_analyzed" },
+                "SCHEDULERID" : { "type" : "string", "index" : "not_analyzed" },
+                "SOURCESITE" : { "type" : "string", "index" : "not_analyzed" },
+                "SPECIALHANDLING" : { "type" : "string", "index" : "not_analyzed" },
+                "STATECHANGETIME" : { "type" : "string", "index" : "not_analyzed" },
+                "TASKBUFFERERRORDIAG" : { "type" : "string", "index" : "not_analyzed" },
+                "TRANSFERTYPE" : { "type" : "string", "index" : "not_analyzed" },
+                "TRANSFORMATION" : { "type" : "string", "index" : "not_analyzed" },
+                "VO" : { "type" : "string", "index" : "not_analyzed" },
+                "WORKINGGROUP" : { "type" : "string", "index" : "not_analyzed" },
+                "host" : { "type" : "string", "index" : "not_analyzed" },
+                "message" : { "type" : "string", "index" : "not_analyzed" },
+                "@timestamp" : { "type" : "date", "format" : "dateOptionalTime" },
+                "ASSIGNEDPRIORITY" : { "type" : "integer"},
+                "ATTEMPTNR" : { "type" : "integer"},
+                "BROKERAGEERRORCODE" : { "type" : "integer"},
+                "CORECOUNT" : { "type" : "integer"},
+                "CPUCONSUMPTIONTIME" : { "type" : "long"},
+                "CREATIONTIME" : { "type" : "date", "format" : "dateOptionalTime"},
+                "CURRENTPRIORITY" : { "type" : "integer"},
+                "DDMERRORCODE" : { "type" : "integer"},
+                "ENDTIME" : { "type" : "date", "format" : "dateOptionalTime"},
+                "EXEERRORCODE" : { "type" : "integer"},
+                "INPUTFILEBYTES" : { "type" : "long"},
+                "JOBDEFINITIONID" : { "type" : "long"},
+                "JOBDISPATCHERERRORCODE" : { "type" : "long"},
+                "JOBDISPATCHERERRORDIAG" : { "type" : "string", "index" : "not_analyzed" },
+                "JOBEXECUTIONID" : { "type" : "long"},
+                "JOBSETID" : { "type" : "long"},
+                "MAXATTEMPT" : { "type" : "integer"},
+                "MAXCPUCOUNT" : { "type" : "long"},
+                "MAXDISKCOUNT" : { "type" : "long"},
+                "MINRAMCOUNT" : { "type" : "long"},
+                "MODIFICATIONTIME" : { "type" : "date", "format" : "dateOptionalTime"},
+                "NEVENTS" : { "type" : "long"},
+                "NINPUTDATAFILES" : { "type" : "integer"},
+                "NOUTPUTDATAFILES" : {"type" : "integer"},
+                "OUTPUTFILEBYTES" : { "type" : "long" },
+                "PANDAID" : { "type" : "long" },
+                "PILOTERRORCODE" : { "type" : "integer" },
+                "PRODDBUPDATETIME" : { "type" : "date", "format" : "dateOptionalTime"},
+                "STARTTIME" : { "type" : "date", "format" : "dateOptionalTime" },
+                "SUPERRORCODE" : {  "type" : "integer" },
+                "TASKBUFFERERRORCODE" : { "type" : "integer"},
+                "TASKID" : { "type" : "long" },
+                "TRANSEXITCODE" : { "type" : "integer"},
+                "walltime" : { "type" : "long" },
+                "job_efficiency" : { "type" : "float" },
+                "queue_time" : { "type" : "long"},
+                "timeGetJob" : { "type" : "long"},
+                "timeStageIn" : { "type" : "long"},
+                "timeExe" : {"type" : "long"},
+                "timeStageOut" : { "type" : "long"},
+                "timeSetup" : { "type" : "long" }
+            }
+        }
+    }
+}'
+
+curl -XDELETE aianalytics01.cern.ch:9200/_template/jobarchive
+curl -XDELETE aianalytics01.cern.ch:9200/jobarchive*
+
+{
+  "template" : "jobsarchived_20*",
+  "settings" : {
+    "analysis" : {
+      "analyzer": {
+        "lowercase_whitespace": {
+          "type": "custom",
+          "tokenizer":  "whitespace",
+          "filter": ["lowercase"]
+        }
+      }
+    }
+  },
+  "mappings" : {
+    "_default_" : {
+        "properties" : {
+          
+        }
+      }
+    }
+}

@@ -1,0 +1,32 @@
+curl -XPOST 'http://aianalytics01.cern.ch:9200/_template/template_2' -d '{
+    "template" : "interval*",
+    "settings" : {
+        "number_of_shards" : 3,
+        "number_of_replicas" : 1
+    },
+    "mappings" : {
+        "interval" : {
+            "_source" : { "enabled" : true },
+            "properties" : {
+                "timestamp" : { "type" : "date" },
+                "computingsite" : { "type" : "string", "index" : "not_analyzed" },
+                "pandaid" : { "type" : "long", "index" : "not_analyzed" },
+                "prodsourcelabel" : { "type" : "string", "index" : "not_analyzed" },
+                "cloud" : { "type" : "string", "index" : "not_analyzed" },
+                "skipped" : { "type" : "integer", "index" : "no" },
+                "sorted" : { "type" : "integer", "index" : "no" },
+                "at::instarting" : {"type" : "integer"},
+                "at::inrunning" : {"type" : "integer"},
+                "at::inactivated" : {"type" : "integer"},
+                "at::inholding" : {"type" : "integer"},
+                "at::indefined" : {"type" : "integer"},
+                "at::inmerging" : {"type" : "integer"},
+                "at::inpending" : {"type" : "integer"},
+                "at::insent" : {"type" : "integer"}
+            }
+        }
+    }
+}'
+
+curl -XDELETE aianalytics01.cern.ch:9200/_template/template_2
+curl -XDELETE aianalytics01.cern.ch:9200/interval*
