@@ -59,13 +59,13 @@ def Skipped(bag):
     else:
         return(0)
         
-@outputSchema('TIMESTAMP:long')
+@outputSchema('TIMESTAMP:chararray')
 def Tstamp(bag):
     if bag is None:
         return(0)
     else:
         for JOBSTATUS, t  in bag:
-            return(t)
+            return(datetime.datetime.fromtimestamp(t/1000).isoformat())
 
 @outputSchema('SORT:int')
 def Sorted(bag):
