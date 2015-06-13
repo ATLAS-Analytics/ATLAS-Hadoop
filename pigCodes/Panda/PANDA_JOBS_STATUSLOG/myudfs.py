@@ -101,6 +101,60 @@ def AllTheTimes(bag):
         res.append((i,inState[i]/1000))
     return res
 
+@outputSchema('stimes:tuple( inPending:long, inDefined:long, inActivated:long, inSent:long,inStarting:long, inRunning:long, inHolding:long, inMerging:long)}')
+def TheTimes(bag):
+
+    if bag is None:
+        return ()  #skip = 1 
+    
+    inPending=inDefined=inActivated=inSent=inStarting=inRunning=inHolding=inMerging=None
+    
+    st=[]
+    ti=[]
+    inState={}
+    res=[]
+    for JOBSTATUS, t  in bag:
+        st.append(JOBSTATUS)
+        ti.append(t)
+
+    for i in range(len(st)-1):
+        if st[i] in inState:
+            inState[st[i]]+=ti[i+1]-ti[i]
+        else:
+            inState[st[i]]=ti[i+1]-ti[i]
+            
+    for i in inState:
+        switch(i):
+            case('pending'):
+                inPending=inState[i]/1000
+                break
+            case('defined'):
+                inDefined=inState[i]/1000
+                break
+            case('activated'):
+                inActivated=inState[i]/1000
+                break            
+            case('sent'):
+                inSent=inState[i]/1000
+                break
+            case('starting'):
+                inStarting=inState[i]/1000
+                break
+            case('running'):
+                inRunning=inState[i]/1000
+                break
+            case('holding'):
+                inHolding=inState[i]/1000
+                break
+            case('merging'):
+                inMerging=inState[i]/1000
+                break
+            default:
+                print "something strange happened!"
+                break
+                
+    return (inPending, inDefined, inActivated, inSent, inStarting, inRunning, inHolding, inMerging)
+
     # if 'pending' in d and 'defined' in d and d['pending']<=d['defined']:
     #     inPending=(d['defined']-d['pending'])/1000
     # else:
