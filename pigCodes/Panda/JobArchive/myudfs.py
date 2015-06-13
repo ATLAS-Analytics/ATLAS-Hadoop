@@ -1,5 +1,7 @@
 @outputSchema('tuple( timeGetJob:int, timeStageIn:int, timeExe:int, timeStageOut:int, timeSetup:int)')
 def deriveTimes(origString):
+    if origString is None:
+        return (0,0,0,0,0)
     times=origString.split('|')
     return (int(times[0]),int(times[1]),int(times[2]),int(times[3]),int(times[4]))
     
