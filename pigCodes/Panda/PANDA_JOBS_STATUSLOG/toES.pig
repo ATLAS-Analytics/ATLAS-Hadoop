@@ -14,7 +14,7 @@ define EsStorage org.elasticsearch.hadoop.pig.EsStorage('es.nodes=http://aianaly
 
 --JOBS = LOAD '/atlas/analytics/panda/intermediate/JOBS_STATUSLOG/Intervals/part-m-00189' as (timestamp: long, PANDAID:long, CLOUD:chararray, COMPUTINGSITE:chararray, PRODSOURCELABEL:chararray, times:bag{tuple(state:chararray, time:long)}, SKIPPED:int, SORTED:int);
 
-JOBS = LOAD '/atlas/analytics/panda/intermediate/JOBS_STATUSLOG/Reshuffle/part-r-00095' as (PANDAID:long, CLOUD:chararray, COMPUTINGSITE:chararray, PRODSOURCELABEL:chararray, times:bag{tuple(state:chararray, time:long)});
+JOBS = LOAD '/atlas/analytics/panda/intermediate/JOBS_STATUSLOG/Reshuffle' as (PANDAID:long, CLOUD:chararray, COMPUTINGSITE:chararray, PRODSOURCELABEL:chararray, times:bag{tuple(state:chararray, time:long)});
 
 JOBInts = foreach JOBS  generate myfuncs.Tstamp(times) as timestamp, PANDAID, CLOUD, COMPUTINGSITE, PRODSOURCELABEL, myfuncs.TheTimes(times) as AT, myfuncs.Skipped(times) as SKIPPED, myfuncs.Sorted(times) as SORTED;
 
@@ -23,4 +23,4 @@ L = foreach JOBInts generate timestamp, PANDAID, CLOUD, COMPUTINGSITE, PRODSOURC
 --dump L;
 --L = LIMIT JOBS 10000; dump L;
 
-STORE L INTO 'interval-data-2015-06-13/interval' USING EsStorage();
+STORE L INTO 'interval-data/interval' USING EsStorage();
