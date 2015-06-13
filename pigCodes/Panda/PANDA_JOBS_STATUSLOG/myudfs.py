@@ -101,7 +101,7 @@ def AllTheTimes(bag):
         res.append((i,inState[i]/1000))
     return res
 
-@outputSchema('stimes:tuple( inPending:long, inDefined:long, inActivated:long, inSent:long,inStarting:long, inRunning:long, inHolding:long, inMerging:long)}')
+@outputSchema('stimes:tuple( inPending:long, inDefined:long, inActivated:long, inSent:long,inStarting:long, inRunning:long, inHolding:long, inMerging:long)')
 def TheTimes(bag):
 
     if bag is None:
