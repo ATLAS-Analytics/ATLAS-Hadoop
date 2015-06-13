@@ -65,7 +65,7 @@ def Tstamp(bag):
         return(0)
     else:
         for JOBSTATUS, t  in bag:
-            return(datetime.datetime.fromtimestamp(t/1000).isoformat())
+            return(datetime.fromtimestamp(t/1000).isoformat())
 
 @outputSchema('SORT:int')
 def Sorted(bag):
