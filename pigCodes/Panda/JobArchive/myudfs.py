@@ -9,16 +9,22 @@ def deriveTimes(origString):
     
 @outputSchema('tuple( walltime:int, cpueff:float, queue_time:int)')
 def deriveDurationAndCPUeff(CREATIONTIME,STARTTIME,ENDTIME,CPUCONSUMPTIONTIME):
-    walltime=cpueff=queue_time=0
-    if ENDTIME is None or  CREATIONTIME is None or STARTTIME is None or ENDTIME is None or CPUCONSUMPTIONTIME is None:
-        return (walltime,cpueff,queue_time)
+    if CREATIONTIME is None or STARTTIME is None or ENDTIME is None or CPUCONSUMPTIONTIME is None:
+        return (0,0.0,0)
+    CREATIONTIME = CREATIONTIME / 1000
+    STARTTIME = STARTTIME / 1000
+    ENDTIME = ENDTIME / 1000
+    
     walltime = ENDTIME-STARTTIME
+    queue_time  =STARTTIME-CREATIONTIME
+    
+    cpueff=0
     try:
         if walltime>0 and CPUCONSUMPTIONTIME!='':
-            cpueff = int(CPUCONSUMPTIONTIME)/walltime
+            cpueff = float(CPUCONSUMPTIONTIME)/walltime
     except:
         print "problem with cpueff: "+CPUCONSUMPTIONTIME
-    queue_time  =STARTTIME-CREATIONTIME
+        
     return (walltime,cpueff,queue_time)
     
 @outputSchema('TIMESTAMP:chararray')
