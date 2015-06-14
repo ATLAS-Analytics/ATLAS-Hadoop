@@ -1,10 +1,11 @@
 from datetime import datetime
 
-@outputSchema('tuple( timeGetJob:long, timeStageIn:long, timeExe:long, timeStageOut:long, timeSetup:long)')
+@outputSchema('tuple( timeGetJob:int, timeStageIn:int, timeExe:int, timeStageOut:int, timeSetup:int)')
 def deriveTimes(origString):
     if origString is None:
         return (0,0,0,0,0)
     times=origString.split('|')
+    if len(times)==4: times.append(0)
     return (int(times[0]),int(times[1]),int(times[2]),int(times[3]),int(times[4]))
     
 @outputSchema('tuple( walltime:int, cpueff:float, queue_time:int)')
