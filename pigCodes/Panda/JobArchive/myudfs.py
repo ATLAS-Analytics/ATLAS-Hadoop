@@ -1,6 +1,6 @@
 from datetime import datetime
 
-@outputSchema('tuple( timeGetJob:int, timeStageIn:int, timeExe:int, timeStageOut:int, timeSetup:int)')
+@outputSchema('tuple( timeGetJob:long, timeStageIn:long, timeExe:long, timeStageOut:long, timeSetup:long)')
 def deriveTimes(origString):
     if origString is None:
         return (0,0,0,0,0)
