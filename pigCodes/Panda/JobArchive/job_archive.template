@@ -102,8 +102,8 @@ curl -XPOST 'http://aianalytics01.cern.ch:9200/_template/jobarchive' -d '{
     }
 }'
 
-curl -XDELETE aianalytics01.cern.ch:9200/_template/jobarchive
-curl -XDELETE 'aianalytics01.cern.ch:9200/jobarchive*'
+curl -XDELETE aianalytics01.cern.ch:9200/_template/job_archive
+curl -XDELETE 'aianalytics01.cern.ch:9200/job_archive*'
 
 {
   "template" : "jobsarchived_20*",
