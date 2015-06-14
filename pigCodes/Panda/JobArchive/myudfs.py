@@ -26,4 +26,4 @@ def Tstamp(ts):
     if ts is None:
         return(0)
     else:
-        return(datetime.fromtimestamp(t/1000).isoformat())
+        return(datetime.fromtimestamp(ts/1000).isoformat())
