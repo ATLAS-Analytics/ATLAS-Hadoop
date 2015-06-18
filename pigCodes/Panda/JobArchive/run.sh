@@ -6,7 +6,7 @@
 cd /afs/cern.ch/user/i/ivukotic/ATLAS-Hadoop/pigCodes/Panda/JobArchive/
 DateToProcess=$(date +%Y-%m-%d)
 echo "Indexing... "${DateToProcess}
-pig -f toES.pig -param INPD=${DateToProcess} -param IND=${DateToProcess:0:7}
+pig -4 log4j.properties -f toES.pig -param INPD=${DateToProcess} -param IND=${DateToProcess:0:7}
 
 
 
