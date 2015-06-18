@@ -12,8 +12,8 @@ REGISTER 'myudfs.py' using jython as myfuncs;
 define EsStorage org.elasticsearch.hadoop.pig.EsStorage('es.nodes=http://aianalytics01.cern.ch:9200');
 
 
-PAN = LOAD '/atlas/analytics/panda/JOBSARCHIVED/jobs.$INPD/part-m-00000.avro' USING AvroStorage();
-DESCRIBE PAN;
+PAN = LOAD '/atlas/analytics/panda/JOBSARCHIVED/jobs.$IND/jobs.$INPD' USING AvroStorage();
+--DESCRIBE PAN;
 
 --L = LIMIT PAN 1000; --dump L;
 
