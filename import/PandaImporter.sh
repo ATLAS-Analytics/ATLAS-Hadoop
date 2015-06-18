@@ -9,8 +9,8 @@ sqoop job --exec JOBSARCHIVEDimport
 
 # moves the produced files into directory with the date in it's name
 DateToMoveTo=$(date +%Y-%m-%d)
-hdfs dfs -mkdir /atlas/analytics/panda/JOBSARCHIVED/jobs.${DateToMoveTo}
-hdfs dfs -mv '/atlas/analytics/panda/JOBSARCHIVED/part*' /atlas/analytics/panda/JOBSARCHIVED/jobs.${DateToMoveTo}/.
+hdfs dfs -mkdir /atlas/analytics/panda/JOBSARCHIVED/jobs.${DateToMoveTo:0:7}/jobs.${DateToMoveTo}
+hdfs dfs -mv '/atlas/analytics/panda/JOBSARCHIVED/part*' /atlas/analytics/panda/JOBSARCHIVED/jobs.${DateToMoveTo:0:7}/jobs.${DateToMoveTo}
 
 ./afs/cern.ch/user/i/ivukotic/ATLAS-Hadoop/pigCodes/Panda/JobArchive/run.sh 
 
