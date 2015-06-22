@@ -1,26 +1,29 @@
 -- this code should make calculate durations of tasks
 
 REGISTER '/usr/lib/pig/piggybank.jar' ;
-
--- regular jars
 REGISTER '/usr/lib/pig/lib/avro-*.jar';
-REGISTER '/usr/lib/pig/lib/jackson-*.jar';
-REGISTER '/usr/lib/pig/lib/json-*.jar';
 REGISTER '/usr/lib/pig/lib/jython-*.jar';
-REGISTER '/usr/lib/pig/lib/snappy-*.jar';
 
 
-PAN = LOAD '/atlas/analytics/panda/JOBSARCHIVED/jobs.2015-03' USING AvroStorage();
-DESCRIBE PAN;
+-- REGISTER '/usr/lib/pig/lib/jackson-*.jar';
+-- REGISTER '/usr/lib/pig/lib/json-*.jar';
+-- REGISTER '/usr/lib/pig/lib/snappy-*.jar';
 
+ajobs = LOAD '/atlas/analytics/panda/JOBSARCHIVED/jobs.2015-03' USING AvroStorage();
+DESCRIBE ajobs;
 
-PA = filter PAN by JOBSTATUS=='finished';
+pjobs = filter ajobs by PRODSOURCELABEL=='user' OR PRODSOURCELABEL=='managed' AND TASKID:>1000;
 
-jGroup = GROUP PA by (TASKID);
-tg = FOREACH jGroup GENERATE group, COUNT(PA.PANDAID), MIN(PA.CREATIONTIME), MAX(PA.ENDTIME);
-dump tg;
+sjobs = FOREACH pjobs GENERATE CREATIONTIME/1000 as creation_time, STARTTIME/1000 as start_time, ENDTIME/1000 as end_time, (STARTTIME - CREATIONTIME)/1000 as wait_time, PANDAID, TASKID, (ENDTIME-STARTTIME)/1000 as jobs_duration, PRODSOURCELABEL;
 
- and (COMPUTINGSITE=='ANALY_AGLT2_SL6' or COMPUTINGSITE=='ANALY_MWT2_SL6' or COMPUTINGSITE=='ANALY_BNL_SHORT' or COMPUTINGSITE=='ANALY_SFU' or COMPUTINGSITE=='ANALY_SLAC');
+jGroup = GROUP sjobs by TASKID;
+tasks = FOREACH jGroup GENERATE group, COUNT(sjobs.PANDAID), MAX(sjobs.end_time)-MIN(sjobs.creation_time) as task_duration, AVG(sjobs.jobs_duration) as avg_job_duration, AVG(sjobs.wait_time) as avg_wait_time;
+DUMP tasks;
+
+STORE tasks INTO 'tmpresult.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'NO_MULTILINE');
+
+task
+--CLOUD
 
 P = foreach PA { generate (long)PANDAID,TRANSFORMATION,JOBNAME,COMMANDTOPILOT, TRANSFERTYPE,(long)MODIFICATIONTIME,  STARTTIME, ENDTIME, COMPUTINGSITE, DESTINATIONSE, CLOUD, REPLACE(SOURCESITE,'ANALY_','') as SOURCE, DESTINATIONSITE, (int)PILOTERRORCODE, (int) NINPUTFILES, ENDTIME - STARTTIME as WALLTIME, STARTTIME - CREATIONTIME as WAITTIME, FLATTEN(STRSPLIT(PILOTTIMING, '\\u007C')) as (timeGetJob:chararray, timeStageIn:chararray,timeExe:chararray,timeStageOut:chararray,timeCleanUp:chararray); };
 
