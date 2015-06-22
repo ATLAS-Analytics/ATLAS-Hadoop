@@ -1,5 +1,7 @@
 -- this code should make calculate durations of tasks
 
+rmf tmpresult.csv
+
 REGISTER '/usr/lib/pig/piggybank.jar' ;
 REGISTER '/usr/lib/pig/lib/avro-*.jar';
 REGISTER '/usr/lib/pig/lib/jython-*.jar';
@@ -12,9 +14,10 @@ REGISTER '/usr/lib/pig/lib/jython-*.jar';
 ajobs = LOAD '/atlas/analytics/panda/JOBSARCHIVED/jobs.2015-03' USING AvroStorage();
 DESCRIBE ajobs;
 
-pjobs = filter ajobs by PRODSOURCELABEL=='user' OR PRODSOURCELABEL=='managed' AND TASKID:>1000;
+pjobs = filter ajobs by PRODSOURCELABEL=='user' OR PRODSOURCELABEL=='managed' AND ((long)TASKID)>1000;
 
-sjobs = FOREACH pjobs GENERATE CREATIONTIME/1000 as creation_time, STARTTIME/1000 as start_time, ENDTIME/1000 as end_time, (STARTTIME - CREATIONTIME)/1000 as wait_time, PANDAID, TASKID, (ENDTIME-STARTTIME)/1000 as jobs_duration, PRODSOURCELABEL;
+sjobs = FOREACH pjobs GENERATE CREATIONTIME/1000 as creation_time, STARTTIME/1000 as start_time, ENDTIME/1000 as end_time, (STARTTIME - CREATIONTIME)/1000 as wait_time, (long)PANDAID, (long)TASKID, (ENDTIME-STARTTIME)/1000 as jobs_duration, PRODSOURCELABEL;
+DESCRIBE sjobs;
 
 jGroup = GROUP sjobs by TASKID;
 tasks = FOREACH jGroup GENERATE group, COUNT(sjobs.PANDAID), MAX(sjobs.end_time)-MIN(sjobs.creation_time) as task_duration, AVG(sjobs.jobs_duration) as avg_job_duration, AVG(sjobs.wait_time) as avg_wait_time;
