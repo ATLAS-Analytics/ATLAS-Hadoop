@@ -1,4 +1,5 @@
 from datetime import datetime
+import time
 
 def strToTS(d):
     (dat,tim)=d.split(' ')
@@ -35,13 +36,6 @@ def deriveDurationAndCPUeff(CREATIONTIME,STARTTIME,ENDTIME,CPUCONSUMPTIONTIME):
         print "problem with cpueff: "+CPUCONSUMPTIONTIME
         
     return (walltime,cpueff,queue_time)
-    
-@outputSchema('TIMESTAMP:chararray')
-def Tstamp(ts):
-    if ts is None:
-        return(0)
-    else:
-        return(datetime.fromtimestamp(ts/1000).isoformat())
         
 @outputSchema('tuple( walltime:int, cpueff:float, queue_time:int)')
 def deriveDurationAndCPUeffNEW(CREATIONTIME,STARTTIME,ENDTIME,CPUCONSUMPTIONTIME):
@@ -51,8 +45,10 @@ def deriveDurationAndCPUeffNEW(CREATIONTIME,STARTTIME,ENDTIME,CPUCONSUMPTIONTIME
     STARTTIME = strToTS(STARTTIME)
     ENDTIME = strToTS(ENDTIME)
     
-    walltime = (ENDTIME-STARTTIME).total_seconds()
-    queue_time  = (STARTTIME-CREATIONTIME).total_seconds()
+    wt = ENDTIME-STARTTIME 
+    qt = STARTTIME-CREATIONTIME
+    walltime = wt.seconds + wt.days * 86400
+    queue_time  = qt.seconds + qt.days * 86400
     
     cpueff=0
     try:
@@ -69,3 +65,11 @@ def Tstamp(ts):
         return(0)
     else:
         return(datetime.fromtimestamp(ts/1000).isoformat())
+
+@outputSchema('TIMESTAMP:chararray')
+def TstampNEW(ts):
+    if ts is None:
+        return(0)
+    else:
+        d=strToTS(ts)
+        return(int(1000*time.mktime(d.timetuple())))
