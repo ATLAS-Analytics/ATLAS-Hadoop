@@ -8,7 +8,8 @@ rmf /atlas/analytics/intermediate/IO/Reshuffle
 REGISTER xAODparser-*.jar
 REGISTER json.jar
 
-RECS = LOAD '/atlas/analytics/xAODcollector/test.json'  using PigStorage as (Rec:chararray);
+RECS = LOAD '/user/rucio01/nongrid_traces/2015-06-30.json'  using PigStorage as (Rec:chararray);
+--RECS = LOAD '/atlas/analytics/xAODcollector/test.json'  using PigStorage as (Rec:chararray);
 --dump RECS;
 
 B = FOREACH RECS GENERATE FLATTEN(xAODparser.Parser(Rec));
@@ -18,6 +19,8 @@ dump B;
 
 F = filter B BY PandaID == 0L;
 
-C = GROUP F ALL;
-D = FOREACH C GENERATE COUNT(F); --, AVG(B.line::ReadCalls), AVG(B.line.ReadCalls);
-dump D; 
+D = foreach F generate line::ReadCalls as RC, line::ReadSize as RS, line::CacheSize as CS ;
+
+G = GROUP D ALL;
+S = FOREACH G GENERATE COUNT(D), AVG(D.RC), AVG(D.RS), AVG(D.CS);
+dump S; 
