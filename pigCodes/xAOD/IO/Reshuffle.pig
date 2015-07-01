@@ -1,9 +1,5 @@
--- remove the intermediate result directory 
-rmf /atlas/analytics/intermediate/IO/Reshuffle
-
--- this code reads from /user/rucio01/nongrid_traces/,  /atlas/analytics/xAODcollector/test.json
--- parses json, calculates readsize averages and
--- stores result for further processing.
+-- this code reads from /user/rucio01/nongrid_traces/
+-- parses json, calculates averages of readsize readcalls and cachesize 
 
 REGISTER xAODparser-*.jar
 REGISTER json.jar
@@ -18,6 +14,9 @@ dump B;
 
 
 F = filter B BY PandaID > 0L;
+
+-- here one needs to fix CacheSize as it has meaning encoded:
+-- negative value is number of bytes, positive number is number of events to cache.
 
 D = foreach F generate line::ReadCalls as RC, line::ReadSize as RS, line::CacheSize as CS ;
 
