@@ -17,7 +17,7 @@ describe B;
 dump B;
 
 
-F = filter B BY PandaID == 0L;
+F = filter B BY PandaID > 0L;
 
 D = foreach F generate line::ReadCalls as RC, line::ReadSize as RS, line::CacheSize as CS ;
 
