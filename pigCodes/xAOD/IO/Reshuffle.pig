@@ -15,7 +15,7 @@ describe B;
 -- dump B;
 
 
-F = filter B BY PandaID == 0L;
+F = filter B BY PandaID > 0L;
 
 -- here one needs to fix CacheSize as it has meaning encoded:
 -- negative value is number of bytes, positive number is number of events to cache.
