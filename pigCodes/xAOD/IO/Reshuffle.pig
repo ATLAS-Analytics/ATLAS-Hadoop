@@ -1,8 +1,7 @@
 -- this code reads from /user/rucio01/nongrid_traces/
--- parses json, calculates averages of readsize readcalls and cachesize 
+-- parses json, calculates averages of readsize readcalls and cachesize
 
 rmf tmp.csv
-
 REGISTER '/usr/lib/pig/piggybank.jar' ;
 REGISTER xAODparser-*.jar
 REGISTER json.jar
@@ -13,7 +12,7 @@ RECS = LOAD '/user/rucio01/nongrid_traces/2015-08-14.json'  using PigStorage as 
 
 B = FOREACH RECS GENERATE FLATTEN(xAODparser.Parser(Rec));
 describe B;
---dump B;
+-- dump B;
 
 
 F = filter B BY PandaID == 0L;
