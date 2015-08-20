@@ -1,0 +1,9 @@
+# pig log files.  #
+###################
+*.log
+
+# results of pig execution #
+############################
+*.crc
+*.avsc
+*.csv
