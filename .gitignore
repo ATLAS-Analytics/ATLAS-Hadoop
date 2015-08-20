@@ -11,3 +11,9 @@
 *.crc
 *.avsc
 *.csv
+
+# R history files #
+###################
+.RData 
+.Rhistory
+
