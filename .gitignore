@@ -1,3 +1,7 @@
+# stupid mac files #
+####################
+.DS_Store 
+
 # pig log files.  #
 ###################
 *.log
