@@ -23,6 +23,6 @@ D = foreach F generate line::ReadCalls as RC, line::ReadSize as RS, line::CacheS
 
 STORE D INTO 'tmp.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',','NO_MULTILINE');
 
-G = GROUP D ALL;
-S = FOREACH G GENERATE COUNT(D), AVG(D.RC), AVG(D.RS), AVG(D.CS), AVG(D.AF), AVG(D.AB), AVG(D.AC);
+G = GROUP D by FT;
+S = FOREACH G GENERATE group, COUNT(D), AVG(D.RC), AVG(D.RS), AVG(D.CS), AVG(D.AF), AVG(D.AB), AVG(D.AC);
 dump S;
