@@ -14,7 +14,7 @@ endDate=$(date +%Y-%m-%d  -d "-3day")
 echo "  ******************************* indexing Panda Jobs into ES **************************"
 
 cd /afs/cern.ch/user/i/ivukotic/ATLAS-Hadoop/pigCodes/Panda/JobArchive/
-pig -4 log4j.properties -f toESuc.pig -param INPD=${startDate}
+pig -4 log4j.properties -f toESnew.pig -param INPD=${startDate}
 
 
 echo "DONE"
