@@ -4,14 +4,14 @@ rmf results/Doug
 REGISTER '/usr/lib/pig/piggybank.jar';
 REGISTER '/usr/lib/pig/lib/avro-*.jar';
 
-REGISTER 'myudfs.py' using jython as myfuncs;
+-- REGISTER 'myudfs.py' using jython as myfuncs;
 
 -- load part of the data
 PAN = LOAD '/atlas/analytics/panda/jobs/2015-08-*' USING AvroStorage();
 DESCRIBE PAN;
 
 -- filter out what we need
-PA = filter PAN by PRODSOURCELABEL=='user' and NOT PRODUSERNAME=='gangarbt' and (INPUTFILEPROJECT=='data15_13TeV' OR INPUTFILEPROJECT=='mc15_13TeV:mc15_13TeV' OR INPUTFILEPROJECT=='mc15_13TeV' OR INPUTFILEPROJECT=='data15_13TeV:data15_13TeV')
+PA = filter PAN by PRODSOURCELABEL=='user' and NOT PRODUSERNAME=='gangarbt' and (INPUTFILEPROJECT=='data15_13TeV' OR INPUTFILEPROJECT=='mc15_13TeV:mc15_13TeV' OR INPUTFILEPROJECT=='mc15_13TeV' OR INPUTFILEPROJECT=='data15_13TeV:data15_13TeV');
 
 
 GR = GROUP PA BY INPUTFILETYPE;
