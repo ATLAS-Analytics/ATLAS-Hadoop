@@ -8,7 +8,7 @@ REGISTER '/usr/lib/pig/piggybank.jar' ;
 REGISTER xAODparser-*.jar
 REGISTER json.jar
 
-RECS = LOAD '/user/rucio01/nongrid_traces/2015-08-14.json'  using PigStorage as (Rec:chararray);
+RECS = LOAD '/user/rucio01/nongrid_traces/2015-08-15.json'  using PigStorage as (Rec:chararray);
 --dump RECS;
 
 B = FOREACH RECS GENERATE FLATTEN(xAODparser.Parser(Rec));
