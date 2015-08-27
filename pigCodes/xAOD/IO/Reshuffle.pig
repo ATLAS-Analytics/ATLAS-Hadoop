@@ -8,7 +8,7 @@ REGISTER '/usr/lib/pig/piggybank.jar' ;
 REGISTER xAODparser-*.jar
 REGISTER json.jar
 
-RECS = LOAD '/user/rucio01/nongrid_traces/2015-08-1?.json'  using PigStorage as (Rec:chararray);
+RECS = LOAD '/atlas/analytics/xAODcollector/2015-08-*.json'  using PigStorage as (Rec:chararray);
 --dump RECS;
 
 B = FOREACH RECS GENERATE FLATTEN(xAODparser.Parser(Rec));
@@ -35,3 +35,4 @@ S1 = FOREACH G1 GENERATE group, COUNT(D), AVG(D.RC), AVG(D.RS), AVG(D.CS), AVG(D
 dump S1;
 
 STORE S1 INTO 'perStorageType.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',','NO_MULTILINE');
+
