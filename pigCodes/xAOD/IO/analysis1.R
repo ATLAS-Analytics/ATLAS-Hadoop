@@ -1,4 +1,4 @@
-res <- read.table( "nongrid.csv", header=FALSE, sep=",",  col.names=c("ReadCount", "ReadSize", "CacheSize", "AccessedFiles", "AccessedBranches", "AccessedContainers"));
+res <- read.table( "OffGridPerStorageType.csv", header=FALSE, sep=",",  col.names=c("AccessType", "Jobs", "ReadCalls", "ReadSize", "CacheSize", "AccessedFiles", "AccessedBranches", "AccessedContainers"));
 
 pl1 <- hist(res$ReadCount,breaks=50);
 pl1$counts = log10(pl1$counts);
