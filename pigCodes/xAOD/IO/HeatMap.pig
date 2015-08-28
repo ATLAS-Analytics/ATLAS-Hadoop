@@ -18,21 +18,27 @@ describe B;
 
 F = filter B BY PandaID > 0L;
 
-D = foreach F generate SIZE(line::accessedFiles) as AF, SIZE(line::AccessedBranches) as AB, SIZE(line::AccessedContainers) as AC , line::fileType as FT ;
+D = foreach F generate line::PandaID as PID, SIZE(line::accessedFiles) as AF, line::AccessedBranches as AB, line::AccessedContainers, line::fileType as FT ;
 
 -- ********************** PANDA  ********************
 
 
-PAN = LOAD '/atlas/analytics/panda/JOBSARCHIVED' USING AvroStorage();
+PAN = LOAD '/atlas/analytics/panda/jobs/2015-08*' USING AvroStorage();
 describe PAN;
 
-PA = filter PAN by prodsourcelabel matches 'user' AND NOT produsername matches 'gangarbt';
+PA = filter PAN by PRODSOURCELABEL matches 'user' AND NOT PRODUSERNAME matches 'gangarbt';
 
+JO = JOIN PA BY PANDAID, D BY PID;
+describe JO;
 
+-- ******************** GROUPING per input file type*******************
 
-G = GROUP D by FT;
-S = FOREACH G GENERATE group, COUNT(D), AVG(D.RC), AVG(D.RS), AVG(D.CS), AVG(D.AF), AVG(D.AB), AVG(D.AC);
-dump S;
+G = GROUP JO by PA::INPUTFILETYPE;
+S = FOREACH G GENERATE group, COUNT(JO), xAODparser.HeatMap(JO.D::AB);
+describe S;
+
+L = LIMIT S 10;
+dump L;
 
 STORE S INTO 'perFileType.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',','NO_MULTILINE');
 
