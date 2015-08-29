@@ -36,9 +36,9 @@ describe JO;
 G = GROUP JO by PA::INPUTFILETYPE;
 S = FOREACH G GENERATE group, COUNT(JO), xAODparser.HeatMap(JO.D::AB);
 describe S;
+dump S;
 
-L = LIMIT S 10;
-dump L;
+
 
 STORE S INTO 'perFileType.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',','NO_MULTILINE');
 
