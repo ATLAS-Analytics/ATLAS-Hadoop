@@ -33,7 +33,7 @@ describe JO;
 -- ******************** GROUPING per input file type*******************
 
 G = GROUP JO by PA::INPUTFILETYPE;
-S = FOREACH G GENERATE group, COUNT(JO), FLATTEN(xAODparser.HeatMap(JO.D::AB));
+S = FOREACH G GENERATE group, COUNT(JO), FLATTEN(xAODparser.HeatMap(JO.D::AB)), FLATTEN(xAODparser.HeatMapCounts(JO.D::AB));
 describe S;
 -- dump S;
 
