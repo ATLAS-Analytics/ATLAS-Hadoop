@@ -1,5 +1,5 @@
-rmf heatmap.csv
-
+rmf heatmapEvents.csv
+rmf heatmapJobs.csv
 REGISTER '/usr/lib/pig/piggybank.jar' ;
 REGISTER '/usr/lib/pig/lib/avro-*.jar';
 REGISTER xAODparser-*.jar
@@ -33,8 +33,11 @@ describe JO;
 -- ******************** GROUPING per input file type*******************
 
 G = GROUP JO by PA::INPUTFILETYPE;
-S = FOREACH G GENERATE group, COUNT(JO), FLATTEN(xAODparser.HeatMap(JO.D::AB) as AB_read_events), FLATTEN(xAODparser.HeatMapCounts(JO.D::AB) as AB_read_jobs);
+S = FOREACH G GENERATE group, COUNT(JO), FLATTEN(xAODparser.HeatMap(JO.D::AB));
 describe S;
 -- dump S;
 
-STORE S INTO 'heatmap.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',','NO_MULTILINE');
+S1 = FOREACH G GENERATE group, COUNT(JO), FLATTEN(xAODparser.HeatMapCounts(JO.D::AB));
+
+STORE S INTO 'heatmapEvents.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',','NO_MULTILINE');
+STORE S1 INTO 'heatmapJobs.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',','NO_MULTILINE');
