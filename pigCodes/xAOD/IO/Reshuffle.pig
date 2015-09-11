@@ -9,9 +9,10 @@ REGISTER xAODparser-*.jar
 REGISTER json.jar
 
 RECS = LOAD '/atlas/analytics/xAODcollector/2015-09-*.json'  using PigStorage as (Rec:chararray);
+describe RECS;
 --dump RECS;
 
-B = FOREACH RECS GENERATE FLATTEN(xAODparser.Parser(Rec));
+B = FOREACH RECS GENERATE FLATTEN(xAODparser.Parser(Rec)), prodsourcelabel;
 describe B;
 -- dump B;
 
