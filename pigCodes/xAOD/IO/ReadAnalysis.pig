@@ -10,7 +10,7 @@ REGISTER json.jar
 REGISTER '/usr/lib/pig/lib/avro-*.jar';
 
 
-RECS = LOAD '/atlas/analytics/xAODcollector/2015-0{8..9}-*.json'  using PigStorage as (Rec:chararray);
+RECS = LOAD '/atlas/analytics/xAODcollector/2015-*.json'  using PigStorage as (Rec:chararray);
 describe RECS;
 --dump RECS;
 
@@ -19,7 +19,7 @@ describe B;
 -- dump B;
 
 
-F = filter B BY PandaID > 0L;
+F = filter B BY PandaID == 0L;
 
 -- here one needs to fix CacheSize as it has meaning encoded:
 -- negative value is number of bytes, positive number is number of events to cache.
