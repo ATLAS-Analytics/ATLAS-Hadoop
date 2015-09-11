@@ -29,7 +29,7 @@ describe PAN;
 
 PA = filter PAN by PRODSOURCELABEL matches 'user' AND NOT PRODUSERNAME matches 'gangarbt';
 
-JO = JOIN PA BY PANDAID, F BY PID;
+JO = JOIN PA BY PANDAID, F BY PandaID;
 describe JO;
 
 
