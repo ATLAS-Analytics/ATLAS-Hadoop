@@ -8,7 +8,7 @@ REGISTER '/usr/lib/pig/piggybank.jar' ;
 REGISTER xAODparser-*.jar
 REGISTER json.jar
 
-RECS = LOAD '/atlas/analytics/xAODcollector/2015-08-*.json'  using PigStorage as (Rec:chararray);
+RECS = LOAD '/atlas/analytics/xAODcollector/2015-09-*.json'  using PigStorage as (Rec:chararray);
 --dump RECS;
 
 B = FOREACH RECS GENERATE FLATTEN(xAODparser.Parser(Rec));
@@ -16,7 +16,7 @@ describe B;
 -- dump B;
 
 
-F = filter B BY PandaID == 0L;
+F = filter B BY PandaID > 0L AND prodsourcelabel == 'user';
 
 -- here one needs to fix CacheSize as it has meaning encoded:
 -- negative value is number of bytes, positive number is number of events to cache.
