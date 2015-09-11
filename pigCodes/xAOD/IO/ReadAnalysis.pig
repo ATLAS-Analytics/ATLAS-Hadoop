@@ -24,7 +24,7 @@ F = filter B BY PandaID > 0L;
 -- here one needs to fix CacheSize as it has meaning encoded:
 -- negative value is number of bytes, positive number is number of events to cache.
 
-D = foreach F generate line::ReadCalls as RC, line::ReadSize as RS, line::CacheSize as CS, SIZE(line::accessedFiles) as AF, SIZE(line::AccessedBranches) as AB, SIZE(line::AccessedContainers) as AC , line::fileType as FT , line::storageType as ST;
+D = foreach F generate ReadCalls as RC, ReadSize as RS, CacheSize as CS, SIZE(accessedFiles) as AF, SIZE(AccessedBranches) as AB, SIZE(AccessedContainers) as AC , fileType as FT , storageType as ST;
 
 
 G = GROUP D by FT;
