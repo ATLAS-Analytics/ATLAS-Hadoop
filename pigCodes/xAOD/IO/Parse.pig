@@ -12,7 +12,7 @@ RECS = LOAD '/atlas/analytics/xAODcollector/2015-09-10.json'  using PigStorage a
 describe RECS;
 --dump RECS;
 
-B = FOREACH RECS GENERATE FLATTEN(xAODparser.Parser(Rec)) as (PandaID: long, TaskID: long, IP: chararray, ROOT_RELEASE: chararray, ReadCalls: long, ReadSize: long, CacheSize: long, accessedFiles: (name: chararray), AccessedBranches: map[long], AccessedContainers: map[long], fileType: chararray, storageType: chararray);
+B = FOREACH RECS GENERATE FLATTEN(xAODparser.Parser(Rec)) as (PandaID: long, TaskID: long, IP: chararray, ROOT_RELEASE: chararray, ReadCalls: long, ReadSize: long, CacheSize: long, accessedFiles: (name: chararray), AccessedBranches: map[int], AccessedContainers: map[int], fileType: chararray, storageType: chararray);
 describe B;
 -- dump B;
 
