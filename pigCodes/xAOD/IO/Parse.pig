@@ -1,7 +1,7 @@
 -- this code reads from /user/rucio01/nongrid_traces/
 -- parses json, calculates averages of readsize readcalls and cachesize
 
-rmf xAODparseData
+rmf /atlas/analytics/xAODcollector/xAODparsedData
 
 REGISTER '/usr/lib/pig/piggybank.jar' ;
 REGISTER xAODparser-*.jar
@@ -15,5 +15,5 @@ describe RECS;
 B = FOREACH RECS GENERATE FLATTEN(xAODparser.Parser(Rec)) AS (PandaID: long, TaskID: long, IP: chararray, ROOT_RELEASE: chararray, ReadCalls: long, ReadSize: long, CacheSize: long, accessedFiles: (name: chararray), AccessedBranches: map[], AccessedContainers: map[], fileType: chararray, storageType: chararray);
 describe B;
 
-STORE B INTO 'xAODparseData' USING AvroStorage();
+STORE B INTO '/atlas/analytics/xAODcollector/xAODparsedData' USING AvroStorage();
 -- dump B;
