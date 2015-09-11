@@ -10,7 +10,7 @@ REGISTER json.jar
 REGISTER '/usr/lib/pig/lib/avro-*.jar';
 
 
-RECS = LOAD '/atlas/analytics/xAODcollector/2015-09-10.json'  using PigStorage as (Rec:chararray);
+RECS = LOAD '/atlas/analytics/xAODcollector/2015-0{8..9}-*.json'  using PigStorage as (Rec:chararray);
 describe RECS;
 --dump RECS;
 
