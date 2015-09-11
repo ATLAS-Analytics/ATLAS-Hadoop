@@ -1,5 +1,6 @@
 -- this code reads from /user/rucio01/nongrid_traces/
--- parses json, calculates averages of readsize readcalls and cachesize
+-- parses json, stores it into AVRO. 
+-- except it does not work due to some Avrostorage stupidity.
 
 rmf /atlas/analytics/xAODcollector/xAODparsedData
 

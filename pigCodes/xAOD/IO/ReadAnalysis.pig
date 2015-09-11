@@ -5,14 +5,18 @@ rmf perFileType.csv
 rmf perStorageType.csv
 
 REGISTER '/usr/lib/pig/piggybank.jar' ;
---REGISTER xAODparser-*.jar
---REGISTER json.jar
+REGISTER xAODparser-*.jar
+REGISTER json.jar
 REGISTER '/usr/lib/pig/lib/avro-*.jar';
 
-B = LOAD 'xAODparseData' USING AvroStorage();
+
+RECS = LOAD '/atlas/analytics/xAODcollector/2015-09-10.json'  using PigStorage as (Rec:chararray);
+describe RECS;
+--dump RECS;
+
+B = FOREACH RECS GENERATE FLATTEN(xAODparser.Parser(Rec)) as (PandaID: long, TaskID: long, IP: chararray, ROOT_RELEASE: chararray, ReadCalls: long, ReadSize: long, CacheSize: long, accessedFiles: (name: chararray), AccessedBranches: map[int], AccessedContainers: map[int], fileType: chararray, storageType: chararray);
 describe B;
 -- dump B;
-
 
 
 F = filter B BY PandaID > 0L;
