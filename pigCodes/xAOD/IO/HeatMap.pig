@@ -7,7 +7,7 @@ REGISTER json.jar
 
 -- ****************** TRACES *************************
 
-RECS = LOAD '/atlas/analytics/xAODcollector/2015-08-*.json'  using PigStorage as (Rec:chararray);
+RECS = LOAD '/atlas/analytics/xAODcollector/2015-*.json'  using PigStorage as (Rec:chararray);
 --dump RECS;
 
 B = FOREACH RECS GENERATE FLATTEN(xAODparser.Parser(Rec));
@@ -22,7 +22,7 @@ D = foreach F generate line::PandaID as PID, SIZE(line::accessedFiles) as AF, li
 -- ********************** PANDA  ********************
 
 
-PAN = LOAD '/atlas/analytics/panda/jobs/2015-08-*' USING AvroStorage();
+PAN = LOAD '/atlas/analytics/panda/jobs/2015-*' USING AvroStorage();
 describe PAN;
 
 PA = filter PAN by PRODSOURCELABEL matches 'user' AND NOT PRODUSERNAME matches 'gangarbt';
