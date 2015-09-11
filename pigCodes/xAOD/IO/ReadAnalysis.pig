@@ -5,19 +5,17 @@ rmf perFileType.csv
 rmf perStorageType.csv
 
 REGISTER '/usr/lib/pig/piggybank.jar' ;
-REGISTER xAODparser-*.jar
-REGISTER json.jar
+--REGISTER xAODparser-*.jar
+--REGISTER json.jar
+REGISTER '/usr/lib/pig/lib/avro-*.jar';
 
-RECS = LOAD '/atlas/analytics/xAODcollector/2015-09-*.json'  using PigStorage as (Rec:chararray);
-describe RECS;
---dump RECS;
-
-B = FOREACH RECS GENERATE FLATTEN(xAODparser.Parser(Rec)), prodsourcelabel;
+B = LOAD 'xAODparseData' USING AvroStorage();
 describe B;
 -- dump B;
 
 
-F = filter B BY PandaID > 0L AND prodsourcelabel == 'user';
+
+F = filter B BY PandaID > 0L;
 
 -- here one needs to fix CacheSize as it has meaning encoded:
 -- negative value is number of bytes, positive number is number of events to cache.
