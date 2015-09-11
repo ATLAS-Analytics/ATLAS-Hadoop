@@ -10,7 +10,7 @@ REGISTER json.jar
 REGISTER '/usr/lib/pig/lib/avro-*.jar';
 
 
-RECS = LOAD '/atlas/analytics/xAODcollector/2015-*.json'  using PigStorage as (Rec:chararray);
+RECS = LOAD '/atlas/analytics/xAODcollector/2015-09-*.json'  using PigStorage as (Rec:chararray);
 describe RECS;
 --dump RECS;
 
@@ -21,10 +21,23 @@ describe B;
 
 F = filter B BY PandaID == 0L;
 
+
+-- when looking at GRID jobs it is important to split user and production jobs
+
+PAN = LOAD '/atlas/analytics/panda/jobs/2015-09-*' USING AvroStorage();
+describe PAN;
+
+PA = filter PAN by PRODSOURCELABEL matches 'user' AND NOT PRODUSERNAME matches 'gangarbt';
+
+JO = JOIN PA BY PANDAID, F BY PID;
+describe JO;
+
+
+
 -- here one needs to fix CacheSize as it has meaning encoded:
 -- negative value is number of bytes, positive number is number of events to cache.
 
-D = foreach F generate ReadCalls as RC, ReadSize as RS, CacheSize as CS, SIZE(accessedFiles) as AF, SIZE(AccessedBranches) as AB, SIZE(AccessedContainers) as AC , fileType as FT , storageType as ST;
+D = foreach JO generate ReadCalls as RC, ReadSize as RS, CacheSize as CS, SIZE(accessedFiles) as AF, SIZE(AccessedBranches) as AB, SIZE(AccessedContainers) as AC , fileType as FT , storageType as ST;
 
 
 G = GROUP D by FT;
