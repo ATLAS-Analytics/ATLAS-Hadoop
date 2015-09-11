@@ -12,7 +12,7 @@ RECS = LOAD '/atlas/analytics/xAODcollector/2015-09-*.json'  using PigStorage as
 describe RECS;
 --dump RECS;
 
-B = FOREACH RECS GENERATE FLATTEN(xAODparser.Parser(Rec));
+B = FOREACH RECS GENERATE FLATTEN(xAODparser.Parser(Rec)) AS (PandaID: long, TaskID: long, IP: chararray, ROOT_RELEASE: chararray, ReadCalls: long, ReadSize: long, CacheSize: long, accessedFiles: (name: chararray), AccessedBranches: map[], AccessedContainers: map[], fileType: chararray, storageType: chararray);
 describe B;
 
 STORE B INTO 'xAODparseData' USING AvroStorage();
