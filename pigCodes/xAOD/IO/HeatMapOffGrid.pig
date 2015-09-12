@@ -24,11 +24,11 @@ D = foreach F generate line::PandaID as PID, SIZE(line::accessedFiles) as AF, li
 -- ******************** GROUPING per input file type*******************
 
 G = GROUP D by FT;
-S = FOREACH G GENERATE group, COUNT(D), FLATTEN(xAODparser.HeatMap(AB));
+S = FOREACH G GENERATE group, COUNT(D), FLATTEN(xAODparser.HeatMap(D.AB));
 describe S;
 -- dump S;
 
-S1 = FOREACH G GENERATE group, COUNT(D), FLATTEN(xAODparser.HeatMapCounts(AB));
+S1 = FOREACH G GENERATE group, COUNT(D), FLATTEN(xAODparser.HeatMapCounts(D.AB));
 
 STORE S INTO 'heatmapEvents.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',','NO_MULTILINE');
 STORE S1 INTO 'heatmapJobs.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',','NO_MULTILINE');
