@@ -21,7 +21,7 @@ SET pig.noSplitCombination TRUE;
 RECS = LOAD '/atlas/analytics/xAODcollector/2015-*.json'  using PigStorage as (Rec:chararray);
 --dump RECS;
 
-B = FOREACH RECS GENERATE FLATTEN(xAODparser.Parser(Rec));
+B = FOREACH RECS GENERATE FLATTEN(xAODparser.Parser(Rec)) as (PandaID: long, TaskID: long, IP: chararray, ROOT_RELEASE: chararray, ReadCalls: long, ReadSize: long, CacheSize: long, accessedFiles: (name: chararray), AccessedBranches: map[int], AccessedContainers: map[int], fileType: chararray, storageType: chararray);
 describe B;
 -- dump B;
 
@@ -34,7 +34,7 @@ D = foreach F generate line::AccessedBranches as AB,  line::fileType as FT ; -- 
 -- ******************** GROUPING per input file type*******************
 
 G = GROUP D by FT;
-S = FOREACH G GENERATE group as FileType, 'OnGrid' as source, CurrentTime() as CurrentTime, COUNT(D) as Jobs, FLATTEN(xAODparser.HeatMapCounts(D.AB));
+S = FOREACH G GENERATE group as FileType, 'OnGrid' as source, CurrentTime() as CurrentTime, COUNT(D) as Jobs, FLATTEN(xAODparser.HeatMapCounts(D.AB) as [int]);
 
 describe S;
 -- dump S;
