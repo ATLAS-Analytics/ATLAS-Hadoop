@@ -34,7 +34,7 @@ D = foreach F generate line::AccessedBranches as AB,  line::fileType as FT ; -- 
 -- ******************** GROUPING per input file type*******************
 
 G = GROUP D by FT;
-S = FOREACH G GENERATE group as FileType, CurrentTime() as CurrentTime, COUNT(D) as Jobs, FLATTEN(xAODparser.HeatMapCounts(D.AB));
+S = FOREACH G GENERATE group as FileType, 'OnGrid' as source, CurrentTime() as CurrentTime, COUNT(D) as Jobs, FLATTEN(xAODparser.HeatMapCounts(D.AB));
 
 describe S;
 -- dump S;
