@@ -28,13 +28,13 @@ describe B;
 
 F = filter B BY PandaID == 0L;
 
-D = foreach F generate line::AccessedBranches as AB,  line::fileType as FT ; -- line::AccessedContainers,
+D = foreach F generate AccessedBranches as AB, fileType as FT ; -- AccessedContainers,
 
 
 -- ******************** GROUPING per input file type*******************
 
 G = GROUP D by FT;
-S = FOREACH G GENERATE group as FileType, 'OnGrid' as source, CurrentTime() as CurrentTime, COUNT(D) as Jobs, FLATTEN(xAODparser.HeatMapCounts(D.AB) as [int]);
+S = FOREACH G GENERATE group as FileType, 'OnGrid' as source, CurrentTime() as CurrentTime, COUNT(D) as Jobs, FLATTEN(xAODparser.HeatMapCounts(D.AB));
 
 describe S;
 -- dump S;
