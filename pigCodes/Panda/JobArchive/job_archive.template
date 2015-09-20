@@ -83,14 +83,14 @@ curl -XPOST 'http://aianalytics01.cern.ch:9200/_template/jobs_archive' -d '{
                 "superrorcode" : {  "type" : "integer" },
                 "taskbuffererrorcode" : { "type" : "integer"},
                 "taskid" : { "type" : "long" },
-                "walltime" : { "type" : "long" },
+                "wall_time" : { "type" : "long" },
                 "job_efficiency" : { "type" : "float" },
                 "queue_time" : { "type" : "long"},
-                "timeGetJob" : { "type" : "long"},
-                "timeStageIn" : { "type" : "long"},
-                "timeExe" : {"type" : "long"},
-                "timeStageOut" : { "type" : "long"},
-                "timeSetup" : { "type" : "long" }
+                "timegetjob" : { "type" : "long"},
+                "timestagein" : { "type" : "long"},
+                "timeexe" : {"type" : "long"},
+                "timestageout" : { "type" : "long"},
+                "timesetup" : { "type" : "long" }
             }
         }
     }
