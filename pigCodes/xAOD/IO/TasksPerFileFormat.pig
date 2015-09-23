@@ -4,7 +4,7 @@ REGISTER json.jar
 REGISTER '/usr/lib/pig/lib/avro-*.jar';
 
 
-RECS = LOAD '/atlas/analytics/xAODcollector/2015-09-1*.json'  using PigStorage as (Rec:chararray);
+RECS = LOAD '/atlas/analytics/xAODcollector/2015-09-15.json'  using PigStorage as (Rec:chararray);
 describe RECS;
 --dump RECS;
 
@@ -49,6 +49,7 @@ F = filter B BY PandaID > 0L;
 D = foreach F generate fileType as FT, TaskID;
 
 G = GROUP D by FT;
+dump G;
 S = FOREACH G {
     D1 = D.TaskID;
     D2 = distinct D1;
