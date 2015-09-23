@@ -1,9 +1,3 @@
--- this code reads from /user/rucio01/nongrid_traces/
--- parses json, calculates averages of readsize readcalls and cachesize
-
-rmf perFileType.csv
-rmf perStorageType.csv
-
 REGISTER '/usr/lib/pig/piggybank.jar' ;
 REGISTER xAODparser-*.jar
 REGISTER json.jar
@@ -52,12 +46,13 @@ F = filter B BY PandaID > 0L;
 -- here one needs to fix CacheSize as it has meaning encoded:
 -- negative value is number of bytes, positive number is number of events to cache.
 
-D1 = foreach F generate fileType as FT, TaskID;
-
-D = DISTINCT D1; 
+D = foreach F generate fileType as FT, TaskID;
 
 G = GROUP D by FT;
-S = FOREACH G GENERATE group, COUNT(D);
+S = FOREACH G {
+    D1 = D.TaskID;
+    D2 = distinct D1;
+    GENERATE group, COUNT(D2);
+    }
 dump S;
 
-STORE S INTO 'perFileType.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',','NO_MULTILINE');
