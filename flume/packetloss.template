@@ -1,7 +1,7 @@
 curl -XDELETE cl-analytics.mwt2.org:9200/_template/packet_loss
 curl -XDELETE 'cl-analytics.mwt2.org:9200/nw_packet_loss*'
 
-curl -XPOST 'http://cl-analytics.mwt2.org:9200/_template/packet_loss' -d '{
+curl -XPOST 'cl-analytics.mwt2.org:9200/_template/packet_loss' -d '{
     "template" : "nw_packet_loss*",
     "settings" : {
         "number_of_shards" : 5,
@@ -19,7 +19,7 @@ curl -XPOST 'http://cl-analytics.mwt2.org:9200/_template/packet_loss' -d '{
     }
 }'
 
-curl -XPOST http://cl-analytics.mwt2.org:9200/_snapshot/cl_backup/ 
+curl -XPOST cl-analytics.mwt2.org:9200/_snapshot/cl_backup/ -d '
 {
     "type": "fs",
     "settings": {
@@ -27,9 +27,23 @@ curl -XPOST http://cl-analytics.mwt2.org:9200/_snapshot/cl_backup/
         "max_snapshot_bytes_per_sec" : "50mb", 
         "max_restore_bytes_per_sec" : "50mb"
     }
-}
+}'
 
 
-curl -XPUT http://cl-analytics.mwt2.org:9200/_snapshot/cl_backup/snapshot_2015-10-05{
-    "indices": "jobs_archive*"
-}
+curl -XPUT cl-analytics.mwt2.org:9200/_snapshot/cl_backup/snapshot_2015-10-05 -d '{"indices": "jobs_archive*" }'
+
+rolling restart
+
+curl -XPUT cl-analytics.mwt2.org:9200/_cluster/settings -d '
+{
+    "transient" : {
+        "cluster.routing.allocation.enable" : "none"
+    }
+}'
+
+curl -XPUT cl-analytics.mwt2.org:9200/_cluster/settings -d '
+{
+    "transient" : {
+        "cluster.routing.allocation.enable" : "all"
+    }
+}'
