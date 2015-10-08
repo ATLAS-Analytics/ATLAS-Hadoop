@@ -1,3 +1,6 @@
+curl -XDELETE cl-analytics.mwt2.org:9200/_template/throughput
+curl -XDELETE 'cl-analytics.mwt2.org:9200/nw_throughput*'
+
 curl -XDELETE cl-analytics.mwt2.org:9200/_template/packet_loss
 curl -XDELETE 'cl-analytics.mwt2.org:9200/nw_packet_loss*'
 
