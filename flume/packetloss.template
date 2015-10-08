@@ -13,31 +13,13 @@ curl -XPOST 'cl-analytics.mwt2.org:9200/_template/packet_loss' -d '{
             "properties" : {
                 "source" : { "type" : "string", "index" : "not_analyzed" },
                 "destination" : { "type" : "string", "index" : "not_analyzed" },
-                "evTimestamp" : { "type" : "date" },
+                "timestamp" : { "type" : "date" },
                 "packet_loss" : { "type" : "float" }
             }
         }
     }
 }'
 
-curl -XPOST 'cl-analytics.mwt2.org:9200/_template/packet_loss' -d '{
-    "template" : "nw_packet_loss*",
-    "settings" : {
-        "number_of_shards" : 5,
-        "number_of_replicas" : 1
-    },
-    "mappings" : {
-        "packet_loss_rate" : {
-            "_source" : { "enabled" : false },
-            "properties" : {
-                "@fields.source" : { "type" : "string", "index" : "not_analyzed" },
-                "@fields.destination" : { "type" : "string", "index" : "not_analyzed" },
-                "@fields.timestamp" : { "type" : "date" },
-                "@fields.packetloss" : { "type" : "float" }
-            }
-        }
-    }
-}'
 
 
 curl -XPOST cl-analytics.mwt2.org:9200/_snapshot/cl_backup/ -d '
