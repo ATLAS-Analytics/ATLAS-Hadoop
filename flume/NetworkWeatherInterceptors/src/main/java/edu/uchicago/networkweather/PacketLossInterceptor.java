@@ -37,7 +37,7 @@ public class PacketLossInterceptor implements Interceptor {
 
 		// This is the event's body
 		String body = new String(event.getBody());
-		LOG.debug(body);
+//		LOG.debug(body);
 		
 		JsonObject jBody;
 		try {
@@ -48,9 +48,9 @@ public class PacketLossInterceptor implements Interceptor {
 		}
 
 		 
-		String source = jBody.get("meta").getAsJsonObject().get("source").toString().replace("\"", "") ;
-		String destination = jBody.get("meta").getAsJsonObject().get("destination").toString().replace("\"", "") ;
-		String body1 = "{\"source\":" + source + ",\"destination\":" + destination + ",\"packet_loss\":";
+		String source = jBody.get("meta").getAsJsonObject().get("source").toString();
+		String destination = jBody.get("meta").getAsJsonObject().get("destination").toString();
+		String body1 = "{\"src\":" + source + ",\"dest\":" + destination + ",\"packet_loss\":";
 		
 		if (! jBody.has("summaries")){
 			LOG.warn("this event has no summaries of any kind.");
@@ -77,18 +77,14 @@ public class PacketLossInterceptor implements Interceptor {
 		
 		List<Event> measurements = new ArrayList<Event>(results.size());
 		
-		Map<String, String> newheaders = new HashMap<String, String>(4);
-		newheaders.put("source", source);
-		newheaders.put("destination", destination);
+		Map<String, String> newheaders = new HashMap<String, String>(1);
 		
 		for (int ind = 0; ind < results.size(); ind++) {
 			Long ts = results.get(ind).getAsJsonArray().get(0).getAsLong() * 1000;
 			newheaders.put("timestamp", ts.toString());
 			Float packetLoss = results.get(ind).getAsJsonArray().get(1).getAsFloat();
-			newheaders.put("packetloss", packetLoss.toString());
 			String bod = body1 + packetLoss.toString() + "}";
-			bod=" ";
-//			LOG.debug(bod);
+			LOG.debug(bod);
 			Event evnt=EventBuilder.withBody(bod.getBytes(charset), newheaders);
 //			LOG.debug(evnt.toString());
 			measurements.add(evnt);
@@ -99,43 +95,6 @@ public class PacketLossInterceptor implements Interceptor {
 
 	public Event intercept(Event event) {
 		 LOG.warn("SINGLE EVENT PROCESSING");
-		// JsonParser parser = new JsonParser();
-		//
-		// // This is the event's body
-		// String body = new String(event.getBody());
-		// LOG.debug(body);
-		// JsonObject jBody;
-		// try {
-		// jBody = parser.parse(body).getAsJsonObject();
-		// } catch (JsonSyntaxException e) {
-		// LOG.error("problem in parsing msg body");
-		// return null;
-		// }
-		// String source=
-		// jBody.get("meta").getAsJsonObject().get("source").toString();
-		// String destination=
-		// jBody.get("meta").getAsJsonObject().get("destination").toString();
-		// JsonArray summaries = jBody.get("summaries").getAsJsonArray();
-		//
-		// LOG.debug(source);
-		// LOG.debug(destination);
-		// JsonArray results=null;
-		// for (int ind = 0; ind < summaries.size(); ind++) {
-		// JsonObject sum=summaries.get(ind).getAsJsonObject();
-		// if (sum.get("summary_window").getAsString().equalsIgnoreCase("300")){
-		// results=sum.get("summary_data").getAsJsonArray();
-		// break;
-		// }
-		// }
-		// LOG.debug(results.toString());
-		//
-		// // These are the event's headers
-		// Map<String, String> headers = event.getHeaders();
-		//
-		// // Enrich header with timestamp?
-		// headers.put("derived", "123.123");
-
-		// Let the enriched event go
 		return event;
 	}
 

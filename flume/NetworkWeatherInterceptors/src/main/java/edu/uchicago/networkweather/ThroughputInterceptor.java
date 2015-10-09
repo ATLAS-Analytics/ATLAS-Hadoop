@@ -50,16 +50,14 @@ public class ThroughputInterceptor implements Interceptor {
 		}
 
 		 
-		String source = jBody.get("meta").getAsJsonObject().get("source").toString().replace("\"", "");
-		String destination = jBody.get("meta").getAsJsonObject().get("destination").toString().replace("\"", "");
+		String source = jBody.get("meta").getAsJsonObject().get("source").toString();
+		String destination = jBody.get("meta").getAsJsonObject().get("destination").toString();
 		String time_duration = jBody.get("meta").getAsJsonObject().get("time_duration").toString().replace("\"", "");
 		Float td= Float.parseFloat(time_duration);
 		
-		String body1 = "{\"source\":" + source + ",\"destination\":" + destination + ",\"throughput\":";
+		String body1 = "{\"src\":" + source + ",\"dest\":" + destination + ",\"throughput\":";
 
-		Map<String, String> newheaders = new HashMap<String, String>(4);
-		newheaders.put("source", source );
-		newheaders.put("destination", destination);
+		Map<String, String> newheaders = new HashMap<String, String>(1);
 		
 		Set<Entry<String, JsonElement>> datapoints = jBody.get("datapoints").getAsJsonObject().entrySet() ;
 		
@@ -72,13 +70,13 @@ public class ThroughputInterceptor implements Interceptor {
 			LOG.debug("throughput: " + ts + "/" + thr);
 
 			newheaders.put("timestamp", ts.toString());
-			newheaders.put("throughput", thr.toString());
 			
-			String bod = body1 + ts.toString() + "}";
-			bod=" ";
-			
+			String bod = body1 + thr.toString() + "}";
+			LOG.debug(bod);
+
 			Event evnt=EventBuilder.withBody(bod.getBytes(charset), newheaders);
 //			LOG.debug(evnt.toString());
+			
 			measurements.add(evnt);
 		}
 		
