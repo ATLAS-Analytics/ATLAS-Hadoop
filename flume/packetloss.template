@@ -1,3 +1,4 @@
+
 curl -XDELETE cl-analytics.mwt2.org:9200/_template/latency
 curl -XDELETE 'cl-analytics.mwt2.org:9200/nw_latency*'
 
