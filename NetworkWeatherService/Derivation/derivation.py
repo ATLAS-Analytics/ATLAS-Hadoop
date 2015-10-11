@@ -5,10 +5,7 @@ res = requests.get('http://cl-analytics.mwt2.org:9200')
 print(res.content)
 
 
-es = Elasticsearch([{'host': 'cl-analytics.mwt2.org'}])
-import requests
-res = requests.get('http://localhost:9200')
-print(res.content)
+es = Elasticsearch([{'host':'cl-analytics.mwt2.org', 'port':9200}])
 st={
 "query": {
         "filtered":{
