@@ -85,7 +85,7 @@ public class OwLatencyInterceptor implements Interceptor {
 			LOG.warn("problem in getting summary info." + e.toString());
 		}
 
-		if (results.size() == 0) {
+		if (results == null) {
 			LOG.warn("message has no summary in 5 min intervals.");
 			return null;
 		} else {
