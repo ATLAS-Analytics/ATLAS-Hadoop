@@ -1,0 +1,79 @@
+#!/bin/sh
+#
+# /etc/init.d/flume-collector-nw_latency
+#
+# chkconfig: - 64 36
+# description: PS Latency Collector
+# processname: flume-ng
+ 
+# Source init functions
+. /etc/rc.d/init.d/functions
+ 
+ 
+title="latency"
+prog="flume-ng"
+args="agent -c flume -f /usr/local/flume/NetworkWeatherCollector.properties -n NetworkWeather3 -C '/usr/local/flume' -Xms64 -Xmx256 "
+prefix="/data/flume/apache-flume-1.6.0-bin/"
+exec_prefix="${prefix}"
+prog_bin="${exec_prefix}/bin/${prog}"
+ 
+PIDFILE="/var/run/${prog}-${title}.pid"
+ 
+start()
+{
+       [ -f $PIDFILE ] && echo "Already started" && exit
+       echo -n $"Starting $prog-$title: "
+       nohup $prog_bin $args 2>&1 > /var/log/${prog}-${title}.log & echo $! > $PIDFILE
+       daemon --pidfile $PIDFILE
+       [ -f $PIDFILE ] && success $"$prog-$title startup" || failure $"$prog-$title startup"
+       echo
+}
+ 
+stop()
+{
+       echo -n $"Shutting down $prog-$title: "
+       [ -f $PIDFILE ] && killproc -p `echo $PIDFILE` || success $"$prog-$title shutdown"
+       echo
+}
+ 
+status()
+{
+       if [ -f $PIDFILE ]; then
+         kill -0 `cat $PIDFILE`
+         if [ $? -eq 0 ]; then
+           echo "$prog-$title is running (pid `cat $PIDFILE`)"
+           return 0
+         else
+           echo "process dead but pidfile exists"
+           return 1
+         fi
+       else
+         echo "$prog-$title is stopped"
+         return 3
+       fi
+}
+ 
+case "$1" in
+ 
+ start)
+   start
+ ;;
+ 
+ stop)
+   stop
+ ;;
+ 
+ status)
+   status
+ ;;
+ 
+ restart)
+   stop
+   start
+ ;;
+ 
+ *)
+   echo "Usage: $0 {start|stop|restart|status}"
+ ;;
+ 
+esac
