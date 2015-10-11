@@ -1,3 +1,38 @@
+curl -XDELETE cl-analytics.mwt2.org:9200/_template/network_weather
+curl -XDELETE 'cl-analytics.mwt2.org:9200/network_weather*'
+
+curl -XPOST 'cl-analytics.mwt2.org:9200/_template/network_weather' -d '{
+    "template" : "network_weather*",
+    "settings" : {
+        "number_of_shards" : 5,
+        "number_of_replicas" : 1
+    },
+    "mappings" : {
+        "packet_loss_rate" : {
+            "_source" : { "enabled" : true },
+            "properties" : {
+            "@message.src" : { "type" : "string", "index" : "not_analyzed" },
+            "@message.dest" : { "type" : "string", "index" : "not_analyzed" }
+            }
+        },
+        "latency" : {
+            "_source" : { "enabled" : true },
+            "properties" : {
+            "@message.src" : { "type" : "string", "index" : "not_analyzed" },
+            "@message.dest" : { "type" : "string", "index" : "not_analyzed" }
+            }
+        },
+        "throughput" : {
+            "_source" : { "enabled" : true },
+            "properties" : {
+            "@message.src" : { "type" : "string", "index" : "not_analyzed" },
+            "@message.dest" : { "type" : "string", "index" : "not_analyzed" }
+            }
+        }
+    }
+}'
+
+
 
 curl -XDELETE cl-analytics.mwt2.org:9200/_template/latency
 curl -XDELETE 'cl-analytics.mwt2.org:9200/nw_latency*'
