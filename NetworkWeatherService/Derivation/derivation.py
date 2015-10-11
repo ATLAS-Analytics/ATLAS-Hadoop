@@ -33,7 +33,7 @@ def worker():
     while True:
         st=q.get()
         res = es.search(index="network_weather-2015-10-11", body=st, size=1000)
-        print "source:", s,"\tdestination:",d,"\trecords:",res['hits']['total'], "\t remaining:",q.qsize()
+        print "records:",res['hits']['total'], "\t remaining:",q.qsize()
         q.task_done()
         
 print "make sure we are connected right."
@@ -82,27 +82,6 @@ for tag in res['aggregations']['unique_vals']['buckets']:
 print "unique sources: ", len(usrcs)
 print "unique destinations: ", len(udests)
 
-st={
-"query": {
-        "filtered":{
-            "query": {
-                "match_all": {}
-            },
-            "filter":{
-                "and": [
-                    {
-                        "term":{ "@message.src":"192.41.230.59" }
-                    },
-                    {
-                        "term":{ "@message.dest":"134.158.20.192" }
-                    }
-                ]
-            }
-        }
-    }
-}
-
-
 q=Queue.Queue()
 for i in range(nThreads):
     t = Thread(target=worker)
@@ -130,9 +109,8 @@ for s in usrcs:
                 }
             }
         }
-
-
         q.put(st)
+
 
 q.join()
 
