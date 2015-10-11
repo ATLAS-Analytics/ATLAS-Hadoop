@@ -1,12 +1,49 @@
+# serial performance client at UC - CL ES  82.26s user 12.98s system 3% cpu 40:47.27 total
+# 10 streams 
 from datetime import datetime
 from elasticsearch import Elasticsearch
 
+import threading
+from threading import Thread
+import  subprocess, Queue, os, sys,time
+
+nThreads=3
+
+class Command(object):
+
+    def __init__(self, cmd):
+        self.cmd = cmd
+        self.process = None
+
+    def run(self, timeout):
+        def target():
+            self.process = subprocess.Popen(self.cmd, shell=True)
+            self.process.communicate()
+
+        th = Thread(target=target)
+        th.start()
+        th.join(timeout)
+        if th.is_alive():
+            print 'Terminating process'
+            self.process.terminate()
+            th.join()
+        return self.process.returncode
+
+def worker():
+    while True:
+        st=q.get()
+        res = es.search(index="network_weather-2015-10-11", body=st, size=1000)
+        print "source:", s,"\tdestination:",d,"\trecords:",res['hits']['total'], "\t remaining:",q.qsize()
+        q.task_done()
+        
+print "make sure we are connected right."
 import requests
 res = requests.get('http://cl-analytics.mwt2.org:9200')
 print(res.content)
 
 es = Elasticsearch([{'host':'cl-analytics.mwt2.org', 'port':9200}])
 
+print "documents to look into:"
 print es.count(index="network_weather-2015-10-11")
 
 usrc={
@@ -66,6 +103,12 @@ st={
 }
 
 
+q=Queue.Queue()
+for i in range(nThreads):
+    t = Thread(target=worker)
+    t.daemon = True
+    t.start()
+
 for s in usrcs:
     for d in udests:
         st={
@@ -87,9 +130,13 @@ for s in usrcs:
                 }
             }
         }
-        res = es.search(index="network_weather-2015-10-11", body=st, size=10000)
-        print "source:", s,"\tdestination:",d,"\trecords:",res['hits']['total']  
 
+
+        q.put(st)
+
+q.join()
+
+print 'All done.'
 
 # res = es.search(index="network_weather-2015-10-11", body=st, size=10000)
 # print("Got %d hits." % res['hits']['total'])
