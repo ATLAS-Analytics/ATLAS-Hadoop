@@ -38,7 +38,7 @@ st={
         }
     }
 }
-res = es.search(index="network-weather", body=st)
+res = es.search(index="network-weather-2015-10-11", body=st)
 print("Got %d Hits:" % res['hits']['total'])
 #for hit in res['hits']['hits']:
 #    print("%(timestamp)s %(author)s: %(text)s" % hit["_source"])
