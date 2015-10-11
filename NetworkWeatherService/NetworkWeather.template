@@ -34,69 +34,8 @@ curl -XPOST 'cl-analytics.mwt2.org:9200/_template/network_weather' -d '{
 
 
 
-curl -XDELETE cl-analytics.mwt2.org:9200/_template/latency
-curl -XDELETE 'cl-analytics.mwt2.org:9200/nw_latency*'
-
-curl -XPOST 'cl-analytics.mwt2.org:9200/_template/latency' -d '{
-    "template" : "nw_latency*",
-    "settings" : {
-        "number_of_shards" : 5,
-        "number_of_replicas" : 1
-    },
-    "mappings" : {
-        "packet_loss_rate" : {
-            "_source" : { "enabled" : true },
-            "properties" : {
-            "@message.src" : { "type" : "string", "index" : "not_analyzed" },
-            "@message.dest" : { "type" : "string", "index" : "not_analyzed" }
-            }
-        }
-    }
-}'
 
 
-curl -XDELETE cl-analytics.mwt2.org:9200/_template/throughput
-curl -XDELETE 'cl-analytics.mwt2.org:9200/nw_throughput*'
-
-curl -XPOST 'cl-analytics.mwt2.org:9200/_template/throughput' -d '{
-    "template" : "nw_throughput*",
-    "settings" : {
-        "number_of_shards" : 5,
-        "number_of_replicas" : 1
-    },
-    "mappings" : {
-        "packet_loss_rate" : {
-            "_source" : { "enabled" : true },
-            "properties" : {
-            "@message.src" : { "type" : "string", "index" : "not_analyzed" },
-            "@message.dest" : { "type" : "string", "index" : "not_analyzed" }
-            }
-        }
-    }
-}'
-
-curl -XDELETE cl-analytics.mwt2.org:9200/_template/packet_loss
-curl -XDELETE 'cl-analytics.mwt2.org:9200/nw_packet_loss*'
-
-
-curl -XPOST 'cl-analytics.mwt2.org:9200/_template/packet_loss' -d '{
-    "template" : "nw_packet_loss*",
-    "settings" : {
-        "number_of_shards" : 5,
-        "number_of_replicas" : 1
-    },
-    "mappings" : {
-        "packet_loss_rate" : {
-            "_source" : { "enabled" : true },
-            "properties" : {
-            "@message.src" : { "type" : "string", "index" : "not_analyzed" },
-            "@message.dest" : { "type" : "string", "index" : "not_analyzed" }
-            }
-        }
-    }
-}'
-
-                
 
 curl -XPOST cl-analytics.mwt2.org:9200/_snapshot/cl_backup/ -d '
 {
