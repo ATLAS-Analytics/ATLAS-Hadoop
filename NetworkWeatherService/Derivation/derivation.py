@@ -8,17 +8,19 @@ from threading import Thread
 import  subprocess, Queue, os, sys,time
 
 nThreads=10
+lock = threading.Lock()
+totr=0
 
 def worker():
-    totr=0
     while True:
         st=q.get()
         res = es.search(index="network_weather-2015-10-11", body=st, size=1000)
+        lock.acquire()
         totr+=res['hits']['total']
+        lock.release()
         print "records:",res['hits']['total'], "\t remaining:",q.qsize(), "\ttotal rec:",totr
         time.sleep(0.1)
         q.task_done()
-    print "my sum:", totr
             
 print "make sure we are connected right."
 import requests
