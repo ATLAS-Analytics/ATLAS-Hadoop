@@ -1,5 +1,5 @@
-# serial performance client at UC - CL ES  82.26s user 12.98s system 3% cpu 40:47.27 total
-# 50 streams sleep 100ms                  117.18s user 27.90s system 51% cpu 4:40.61 total
+# 1 stream 
+# 10 streams                 
 from datetime import datetime
 from elasticsearch import Elasticsearch
 
@@ -20,7 +20,6 @@ def worker():
         totr+=res['hits']['total']
         lock.release()
         print "records:",res['hits']['total'], "\t remaining:",q.qsize(), "\ttotal rec:",totr
-        time.sleep(0.1)
         q.task_done()
             
 print "make sure we are connected right."
