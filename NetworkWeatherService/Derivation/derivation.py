@@ -34,7 +34,7 @@ def worker():
         st=q.get()
         res = es.search(index="network_weather-2015-10-11", body=st, size=1000)
         print "records:",res['hits']['total'], "\t remaining:",q.qsize()
-        time.sleep(1)
+        time.sleep(0.1)
         q.task_done()
         
 print "make sure we are connected right."
