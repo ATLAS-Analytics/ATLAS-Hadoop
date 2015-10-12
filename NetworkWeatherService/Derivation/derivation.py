@@ -8,13 +8,14 @@ from threading import Thread
 import  subprocess, Queue, os, sys,time
 
 nThreads=1
-
+totr=0
 
 def worker():
     while True:
         st=q.get()
         res = es.search(index="network_weather-2015-10-11", body=st, size=1000)
-        print "records:",res['hits']['total'], "\t remaining:",q.qsize()
+        totr+=res['hits']['total']
+        print "records:",res['hits']['total'], "\t remaining:",q.qsize(), "\ttotal rec:",totr
         # time.sleep(0.1)
         q.task_done()
         
