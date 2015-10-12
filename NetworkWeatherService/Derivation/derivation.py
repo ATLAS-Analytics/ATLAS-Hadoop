@@ -11,6 +11,7 @@ nThreads=1
 totr=0
 
 def worker():
+    totr=0
     while True:
         st=q.get()
         res = es.search(index="network_weather-2015-10-11", body=st, size=1000)
