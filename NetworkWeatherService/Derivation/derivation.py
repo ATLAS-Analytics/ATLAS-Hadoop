@@ -1,5 +1,5 @@
 # serial performance client at UC - CL ES  82.26s user 12.98s system 3% cpu 40:47.27 total
-# 10 streams 
+# 50 streams sleep 100ms                  117.18s user 27.90s system 51% cpu 4:40.61 total
 from datetime import datetime
 from elasticsearch import Elasticsearch
 
@@ -9,25 +9,6 @@ import  subprocess, Queue, os, sys,time
 
 nThreads=50
 
-class Command(object):
-
-    def __init__(self, cmd):
-        self.cmd = cmd
-        self.process = None
-
-    def run(self, timeout):
-        def target():
-            self.process = subprocess.Popen(self.cmd, shell=True)
-            self.process.communicate()
-
-        th = Thread(target=target)
-        th.start()
-        th.join(timeout)
-        if th.is_alive():
-            print 'Terminating process'
-            self.process.terminate()
-            th.join()
-        return self.process.returncode
 
 def worker():
     while True:
@@ -58,7 +39,6 @@ usrc={
        }
     }
 }
-
 udest={
     "size": 0, 
     "aggregations": {
@@ -70,7 +50,8 @@ udest={
        }
     }
 }
-usrcs=udests=[]
+usrcs=[]
+udests=[]
 
 res = es.search(index="network_weather-2015-10-11", body=usrc, size=10000)
 for tag in res['aggregations']['unique_vals']['buckets']:
