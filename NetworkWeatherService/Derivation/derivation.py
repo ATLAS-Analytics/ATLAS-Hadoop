@@ -7,7 +7,7 @@ import threading
 from threading import Thread
 import  subprocess, Queue, os, sys,time
 
-nThreads=3
+nThreads=2
 
 class Command(object):
 
@@ -34,6 +34,7 @@ def worker():
         st=q.get()
         res = es.search(index="network_weather-2015-10-11", body=st, size=1000)
         print "records:",res['hits']['total'], "\t remaining:",q.qsize()
+        time.sleep(1)
         q.task_done()
         
 print "make sure we are connected right."
