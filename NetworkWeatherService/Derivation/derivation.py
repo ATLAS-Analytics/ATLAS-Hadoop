@@ -21,7 +21,7 @@ def worker():
         lock.release()
         print "records:",res['hits']['total'], "\t remaining:",q.qsize(), "\ttotal rec:",totr
         q.task_done()
-            
+
 print "make sure we are connected right."
 import requests
 res = requests.get('http://cl-analytics.mwt2.org:9200')
@@ -33,7 +33,7 @@ print "documents to look into:"
 print es.count(index="network_weather-2015-10-11")
 
 usrc={
-    "size": 0, 
+    "size": 0,
     "aggregations": {
        "unique_vals": {
           "terms": {
@@ -44,7 +44,7 @@ usrc={
     }
 }
 udest={
-    "size": 0, 
+    "size": 0,
     "aggregations": {
        "unique_vals": {
           "terms": {
@@ -113,4 +113,3 @@ print 'All done.'
 #         print "\t delay_mean:",hit['_source']['@message']['delay_mean'], "\tdelay_sd:",hit['_source']['@message']['delay_sd']
 #     elif hit['_type']=='throughput':
 #         print "\t throughput:",hit['_source']['@message']['throughput']
-    
