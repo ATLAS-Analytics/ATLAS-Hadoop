@@ -8,7 +8,6 @@ from threading import Thread
 import  subprocess, Queue, os, sys,time
 
 nThreads=10
-totr=0
 
 def worker():
     totr=0
@@ -17,9 +16,10 @@ def worker():
         res = es.search(index="network_weather-2015-10-11", body=st, size=1000)
         totr+=res['hits']['total']
         print "records:",res['hits']['total'], "\t remaining:",q.qsize(), "\ttotal rec:",totr
-        # time.sleep(0.1)
+        time.sleep(0.1)
         q.task_done()
-        
+    print "my sum:", totr
+            
 print "make sure we are connected right."
 import requests
 res = requests.get('http://cl-analytics.mwt2.org:9200')
