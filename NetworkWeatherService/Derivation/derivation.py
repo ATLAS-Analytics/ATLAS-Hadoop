@@ -1,5 +1,5 @@
-# 1 stream 
-# 10 streams                 
+# 1 stream
+# 10 streams             25.15s user 4.63s system 47% cpu 1:02.48 total
 from datetime import datetime
 from elasticsearch import Elasticsearch
 
@@ -7,7 +7,7 @@ import threading
 from threading import Thread
 import  subprocess, Queue, os, sys,time
 
-nThreads=10
+nThreads=1
 lock = threading.Lock()
 totr=0
 
