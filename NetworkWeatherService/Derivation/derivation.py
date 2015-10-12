@@ -7,7 +7,7 @@ import threading
 from threading import Thread
 import  subprocess, Queue, os, sys,time
 
-nThreads=1
+nThreads=10
 totr=0
 
 def worker():
