@@ -7,7 +7,7 @@ import threading
 from threading import Thread
 import  subprocess, Queue, os, sys,time
 
-nThreads=5
+nThreads=50
 
 class Command(object):
 
