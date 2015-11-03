@@ -1,22 +1,25 @@
 -- remove results directory 
 rmf results/Panda/US_users_priorities
+
 -- this code tries to aswer the following question:
 -- do US ATLAS users have any advantage in getting their code to run
 -- thanks to "over the pledge" resources available at US ATLAS sites
 
--- redo Slimming
--- rmf PandaSlimmed;
--- register '/usr/lib/pig/piggybank.jar' ;
--- DEFINE CSVLoader org.apache.pig.piggybank.storage.CSVLoader();
+-- registering libraries we will need
+REGISTER '/usr/lib/pig/piggybank.jar' ;
+REGISTER '/usr/lib/pig/lib/avro-*.jar';
 
--- P = LOAD 'Panda' USING CSVLoader  as (PANDAID:long, MODIFICATIONTIME:long, JOBDEFINITIONID:long, SCHEDULERID:chararray, PILOTID:chararray, CREATIONTIME:long, CREATIONHOST:chararray, MODIFICATIONHOST:chararray, ATLASRELEASE:chararray, TRANSFORMATION:chararray, HOMEPACKAGE:chararray, PRODSERIESLABEL:chararray, PRODSOURCELABEL:chararray, PRODUSERID:chararray, ASSIGNEDPRIORITY:long, CURRENTPRIORITY:long, ATTEMPTNR:int, MAXATTEMPT:int, JOBSTATUS:chararray, JOBNAME:chararray, MAXCPUCOUNT:long, MAXCPUUNIT:chararray, MAXDISKCOUNT:long, MAXDISKUNIT:chararray, IPCONNECTIVITY:chararray, MINRAMCOUNT:long, MINRAMUNIT:chararray, STARTTIME:long, ENDTIME:long, CPUCONSUMPTIONTIME:long, CPUCONSUMPTIONUNIT:chararray, COMMANDTOPILOT:chararray, TRANSEXITCODE:chararray, PILOTERRORCODE::int, PILOTERRORDIAG:chararray, EXEERRORCODE:int, EXEERRORDIAG:chararray, SUPERRORCODE:int, SUPERRORDIAG:chararray, DDMERRORCODE:int, DDMERRORDIAG:chararray, BROKERAGEERRORCODE:int, BROKERAGEERRORDIAG:chararray, JOBDISPATCHERERRORCODE:int, JOBDISPATCHERERRORDIAG:chararray, TASKBUFFERERRORCODE:int, TASKBUFFERERRORDIAG:chararray, COMPUTINGSITE:chararray, COMPUTINGELEMENT:chararray, PRODDBLOCK:chararray, DISPATCHDBLOCK:chararray, DESTINATIONDBLOCK:chararray, DESTINATIONSE:chararray, NEVENTS:long, GRID:chararray, CLOUD:chararray, CPUCONVERSION:float, SOURCESITE:chararray, DESTINATIONSITE:chararray, TRANSFERTYPE:chararray, TASKID:long, CMTCONFIG:chararray, STATECHANGETIME:long, PRODDBUPDATETIME:long, LOCKEDBY:chararray, RELOCATIONFLAG:int, JOBEXECUTIONID:long, VO:chararray, PILOTTIMING:chararray, WORKINGGROUP:chararray, PROCESSINGTYPE:chararray, PRODUSERNAME:chararray, NINPUTFILES:int, COUNTRYGROUP:chararray, BATCHID:chararray, PARENTID:long, SPECIALHANDLING:chararray, CORECOUNT:int, NINPUTDATAFILES:int, INPUTFILETYPE:chararray, INPUTFILEPROJECT:chararray, INPUTFILEBYTES:long, NOUTPUTDATAFILES:int,OUTPUTFILEBYTES:long);
+REGISTER 'myudfs.py' using jython as myfuncs;
 
--- B = foreach P generate PANDAID, CREATIONTIME, ASSIGNEDPRIORITY, CURRENTPRIORITY, JOBSTATUS, STARTTIME, ENDTIME, CPUCONSUMPTIONTIME, COMPUTINGSITE, DESTINATIONSE, NEVENTS, CLOUD, SOURCESITE, DESTINATIONSITE, TRANSFERTYPE, PILOTTIMING, NINPUTFILES, COUNTRYGROUP, NINPUTDATAFILES, INPUTFILEBYTES, ENDTIME - STARTTIME as WALLTIME, STARTTIME - CREATIONTIME as WAITTIME;
+-- load data from Oct 2015
+PAN = LOAD '/atlas/analytics/panda/jobs/2015-10-*' USING AvroStorage();
 
--- store B into 'PandaSlimmed';
+-- filter out what we don't need
+PA = filter PAN by PRODSOURCELABEL=='user' and NOT PRODUSERNAME=='gangarbt';
 
+P = foreach PA generate COUNTRYGROUP, CLOUD, ASSIGNEDPRIORITY, CURRENTPRIORITY, FLATTEN(myfuncs.deriveDurationAndCPUeffNEW(CREATIONTIME,STARTTIME,ENDTIME,CPUCONSUMPTIONTIME)) as (wall_time:int, cpu_eff:float, queue_time:int);
+DESCRIBE P;
 
-P = LOAD 'PandaSlimmed' as (PANDAID, CREATIONTIME, ASSIGNEDPRIORITY, CURRENTPRIORITY, JOBSTATUS, STARTTIME, ENDTIME, CPUCONSUMPTIONTIME, COMPUTINGSITE, DESTINATIONSE, NEVENTS, CLOUD, SOURCESITE, DESTINATIONSITE, TRANSFERTYPE, PILOTTIMING, NINPUTFILES, COUNTRYGROUP, NINPUTDATAFILES, INPUTFILEBYTES, WALLTIME:long, WAITTIME:long);
 
 -- check distribution of jobs over clouds
 CL = group P by CLOUD;
