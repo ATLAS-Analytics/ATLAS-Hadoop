@@ -21,7 +21,7 @@ REGISTER '/usr/lib/pig/lib/avro-*.jar';
 DEFINE CSVExcelStorage org.apache.pig.piggybank.storage.CSVExcelStorage();
 
 -- load data from middle 10 days of May 2015
-PAN = LOAD '/atlas/analytics/panda/JOBSARCHIVED/jobs.2015-05/jobs.2015-05-1*' USING AvroStorage();
+PAN = LOAD '/atlas/analytics/panda/jobs/2015-05-1*' USING AvroStorage();
 
 -- to see all the columns defined.
 DESCRIBE PAN;
