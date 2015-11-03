@@ -33,19 +33,19 @@ NonUSsites = filter P by not CLOUD matches '.*US.*';
 -- group the jobs according to users provenance
 gUSsites = group USsites by COUNTRYGROUP;
 NusersOfUSsites = foreach gUSsites generate group, COUNT(USsites.COUNTRYGROUP);
-WaitTimesOfUsersOfUSsites = foreach gUSsites generate group, AVG(USsites.WAITTIME);
+WaitTimesOfUsersOfUSsites = foreach gUSsites generate group, AVG(USsites.queue_time);
 store NusersOfUSsites into 'results/Panda/US_users_priorities/NusersOfUSsites';
 store WaitTimesOfUsersOfUSsites into 'results/Panda/US_users_priorities/WaitTimesOfUsersOfUSsites';
 
 gNonUSsites = group NonUSsites by COUNTRYGROUP;
 NusersOfNonUSsites = foreach gNonUSsites generate group, COUNT(NonUSsites.COUNTRYGROUP);
-WaitTimesOfUsersOfNonUSsites = foreach gNonUSsites generate group, AVG(NonUSsites.WAITTIME);  
+WaitTimesOfUsersOfNonUSsites = foreach gNonUSsites generate group, AVG(NonUSsites.queue_time);  
 store NusersOfNonUSsites into 'results/Panda/US_users_priorities/NusersOfNonUSsites';
 store WaitTimesOfUsersOfNonUSsites into 'results/Panda/US_users_priorities/WaitTimesOfUsersOfNonUSsites';
 
 -- group the jobs by both users provenance and cloud
 gAll = group P by (COUNTRYGROUP, CLOUD);
-WaitTimePerCloudOrigin = foreach gAll generate group, AVG(P.WAITTIME);
-nJobsPerCloudOrigin = foreach gAll generate group, COUNT(P.WAITTIME);
+WaitTimePerCloudOrigin = foreach gAll generate group, AVG(P.queue_time);
+nJobsPerCloudOrigin = foreach gAll generate group, COUNT(P.queue_time);
 store WaitTimePerCloudOrigin into 'results/Panda/US_users_priorities/WaitTimePerCloudOrigin';
 store nJobsPerCloudOrigin into 'results/Panda/US_users_priorities/nJobsPerCloudOrigin';
