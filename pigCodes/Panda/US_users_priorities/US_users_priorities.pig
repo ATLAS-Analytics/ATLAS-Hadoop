@@ -16,6 +16,7 @@ PAN = LOAD '/atlas/analytics/panda/jobs/2015-10-*' USING AvroStorage();
 
 -- filter out what we don't need
 PA = filter PAN by PRODSOURCELABEL=='user' and NOT PRODUSERNAME=='gangarbt';
+-- and (INPUTFILEPROJECT=='data15_13TeV' OR INPUTFILEPROJECT=='mc15_13TeV:mc15_13TeV' OR INPUTFILEPROJECT=='mc15_13TeV' OR INPUTFILEPROJECT=='data15_13TeV:data15_13TeV');
 
 P = foreach PA generate COUNTRYGROUP, CLOUD, ASSIGNEDPRIORITY, CURRENTPRIORITY, FLATTEN(myfuncs.deriveDurationAndCPUeffNEW(CREATIONTIME,STARTTIME,ENDTIME,CPUCONSUMPTIONTIME)) as (wall_time:int, cpu_eff:float, queue_time:int);
 DESCRIBE P;
