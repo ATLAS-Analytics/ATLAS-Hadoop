@@ -1,11 +1,9 @@
 -- remove the intermediate result directory 
-rmf /atlas/analytics/panda/intermediate/JOBS_STATUSLOG/Reshuffle
+rmf /atlas/analytics/panda/intermediate/jobs_status/Reshuffle
 
--- this code reads from /atlas/analytics/panda/JOBS_STATUSLOG, 
+-- this code reads from /atlas/analytics/panda/jobs_status, 
 -- reshuffles records so that each pandaid has only one row,
 -- stores result for further processing.
--- goes from 1 226 804 123 to 242 960 641 records
--- goes to 155 375 067 after 2014/01/01 cut
 
 REGISTER '/usr/lib/pig/piggybank.jar' ;
 REGISTER '/usr/lib/pig/lib/avro-*.jar';
@@ -18,11 +16,10 @@ REGISTER 'myudfs.py' using jython as myfuncs;
 
 --PANDAID:long, MODIFICATIONTIME:chararray, JOBSTATUS:chararray, PRODSOURCELABEL:chararray, CLOUD:chararray, COMPUTINGSITE:chararray
 
-AJOBS = LOAD '/atlas/analytics/panda/JOBS_STATUSLOG/' USING AvroStorage();
+JOBS = LOAD '/atlas/analytics/panda/jobs_status/2015-10-2*' USING AvroStorage();
 
---JOBS = filter AJOBS by COMPUTINGSITE=='ANALY_MWT2_SL6' and MODIFICATIONTIME>1388534400000L; // 2014.1.1
-JOBS = filter AJOBS by MODIFICATIONTIME>1388534400000L;
+describe JOBS;
 
 grJ = group JOBS by (PANDAID, CLOUD, COMPUTINGSITE, PRODSOURCELABEL);
 gJOBS = foreach grJ { generate FLATTEN(group) as (PANDAID,CLOUD,COMPUTINGSITE,PRODSOURCELABEL), myfuncs.BagToBag(JOBS); };
-STORE gJOBS into '/atlas/analytics/panda/intermediate/JOBS_STATUSLOG/Reshuffle';
+STORE gJOBS into '/atlas/analytics/panda/intermediate/jobs_status/Reshuffle';
