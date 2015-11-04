@@ -1,4 +1,4 @@
--- this code should make calculate durations of tasks
+-- this code should calculate durations of tasks
 
 rmf tmpresult.csv
 
