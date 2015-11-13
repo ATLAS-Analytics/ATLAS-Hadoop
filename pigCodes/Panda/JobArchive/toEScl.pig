@@ -12,7 +12,7 @@ REGISTER 'myudfs.py' using jython as myfuncs;
 SET default_parallel 5;
 SET pig.noSplitCombination TRUE;
 
-define EsStorage org.elasticsearch.hadoop.pig.EsStorage('es.nodes=http://130.127.133.62:9200');
+define EsStorage org.elasticsearch.hadoop.pig.EsStorage('es.nodes=http://cl-analytics.mwt2.org:9200');
 
 
 PAN = LOAD '/atlas/analytics/panda/jobs/$INPD' USING AvroStorage();
