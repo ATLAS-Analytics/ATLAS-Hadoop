@@ -1,0 +1,89 @@
+curl -XDELETE cl-analytics.mwt2.org:9200/_template/dkc
+curl -XDELETE 'cl-analytics.mwt2.org:9200/dkc*'
+
+curl -XPOST 'http://cl-analytics.mwt2.org:9200/_template/dkc' -d '{
+    "template" : "dkc*",
+    "settings" : {
+        "number_of_shards" : 5,
+        "number_of_replicas" : 1
+    },
+    "mappings" : {
+        "data" : {
+            "_source" : { "enabled" : true },
+            "properties" : {
+            
+                "PHYS_GROUP": { "type" : "string", "index" : "not_analyzed" },
+                "REQUEST_ID": { "type" : "string", "index" : "not_analyzed" },
+                "TASK_ID": { "type" : "string", "index" : "not_analyzed" },
+                "DATASET_NAME": { "type" : "string", "index" : "not_analyzed" },
+                "R_CAMPAIGN": { "type" : "string", "index" : "not_analyzed" },
+                "R_DESCRIPTION": { "type" : "string", "index" : "not_analyzed" },
+                "R_ENERGY_GEV": { "type" : "string", "index" : "not_analyzed" },
+                "R_EXCEPTION": { "type" : "string", "index" : "not_analyzed" },
+                "R_IS_FAST": { "type" : "string", "index" : "not_analyzed" },
+                "R_LOCKED": { "type" : "string", "index" : "not_analyzed" },
+                "R_MANAGER": { "type" : "string", "index" : "not_analyzed" },
+                "R_PROJECT": { "type" : "string", "index" : "not_analyzed" },
+                "R_PROVENANCE": { "type" : "string", "index" : "not_analyzed" },              
+                "R_REFERENCE": { "type" : "string", "index" : "not_analyzed" },
+                "R_REFERENCE_LINK": { "type" : "string", "index" : "not_analyzed" },
+                "R_REQUEST_TYPE": { "type" : "string", "index" : "not_analyzed" },
+                "R_STATUS": { "type" : "string", "index" : "not_analyzed" },
+                "R_SUB_CAMPAIGN": { "type" : "string", "index" : "not_analyzed" },
+                "T_BUG_REPORT": { "type" : "string", "index" : "not_analyzed" },
+                "T_BUNCHSPACING": { "type" : "string", "index" : "not_analyzed" },
+                "T_CAMPAIGN": { "type" : "string", "index" : "not_analyzed" },
+                "T_CHAIN_TID": { "type" : "string", "index" : "not_analyzed" },
+                "T_COMMENTS": { "type" : "string", "index" : "not_analyzed" },
+                "T_CURRENT_PRIORITY": { "type" : "string", "index" : "not_analyzed" },
+                "T_DSN": { "type" : "string", "index" : "not_analyzed" },
+                "T_DYNAMIC_JOB_DEFINITION": { "type" : "string", "index" : "not_analyzed" },
+                "T_INPUTDATASET": { "type" : "string", "index" : "not_analyzed" },
+                "T_IS_EXTENSION": { "type" : "string", "index" : "not_analyzed" },
+                "T_NFILESFAILED": { "type" : "string", "index" : "not_analyzed" },
+                "T_NFILESFINISHED": { "type" : "string", "index" : "not_analyzed" },
+                "T_NFILESONHOLD": { "type" : "string", "index" : "not_analyzed" },
+                "T_NFILESTOBEUSED": { "type" : "string", "index" : "not_analyzed" },
+                "T_NFILESUSED": { "type" : "string", "index" : "not_analyzed" },
+                "T_PARENT_TID": { "type" : "string", "index" : "not_analyzed" },
+                "T_PHYS_GROUP": { "type" : "string", "index" : "not_analyzed" },
+                "T_PHYS_SHORT": { "type" : "string", "index" : "not_analyzed" },
+                "T_PHYSICS_TAG": { "type" : "string", "index" : "not_analyzed" },
+                "T_PILEUP": { "type" : "string", "index" : "not_analyzed" },
+                "T_POSTPRODUCTION": { "type" : "string", "index" : "not_analyzed" },
+                "T_PPTIMESTAMP": { "type" : "date" },
+                "T_PRIORITY": { "type" : "string", "index" : "not_analyzed" },
+                "T_PRODSOURCELABEL": { "type" : "string", "index" : "not_analyzed" },
+                "T_PROJECT": { "type" : "string", "index" : "not_analyzed" },
+                "T_PROVENANCE": { "type" : "string", "index" : "not_analyzed" },
+                "T_REFERENCE": { "type" : "string", "index" : "not_analyzed" },
+                "T_SIMULATION_TYPE": { "type" : "string", "index" : "not_analyzed" },
+                "T_START_TIME": { "type" : "date" },
+                "T_STATUS": { "type" : "string", "index" : "not_analyzed" },
+                "T_STEP_ID": { "type" : "string", "index" : "not_analyzed" },
+                "T_SUBCAMPAIGN": { "type" : "string", "index" : "not_analyzed" },
+                "T_SUBMIT_TIME": { "type" : "date" },
+                "T_TASKNAME": { "type" : "string", "index" : "not_analyzed" },
+                "T_TIMESTAMP": { "type" : "date" },
+                "T_TOTAL_DONE_JOBS": { "type" : "string", "index" : "not_analyzed" },
+                "T_TOTAL_EVENTS": { "type" : "string", "index" : "not_analyzed" },
+                "T_TOTAL_REQ_EVENTS": { "type" : "string", "index" : "not_analyzed" },
+                "T_TOTAL_REQ_JOBS": { "type" : "string", "index" : "not_analyzed" },
+                "T_UPDATE_OWNER": { "type" : "string", "index" : "not_analyzed" },
+                "T_UPDATE_TIME": { "type" : "date" },
+                "T_USERNAME": { "type" : "string", "index" : "not_analyzed" },
+                "T_VO": { "type" : "string", "index" : "not_analyzed" },
+                "D_PHYS_GROUP": { "type" : "string", "index" : "not_analyzed" },
+                "D_EVENTS": { "type" : "string", "index" : "not_analyzed" },
+                "D_FILES": { "type" : "string", "index" : "not_analyzed" },
+                "D_STATUS": { "type" : "string", "index" : "not_analyzed" },
+                "D_TIMESTAMP": { "type" : "date" },
+                "D_CAMPAIGN": { "type" : "string", "index" : "not_analyzed" },
+                "D_CONTAINER_FLAG": { "type" : "string", "index" : "not_analyzed" },
+                "D_CONTAINER_TIME": { "type" : "date" }
+                
+            }
+        }
+    }
+}'
+
