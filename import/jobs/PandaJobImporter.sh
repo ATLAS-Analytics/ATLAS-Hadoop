@@ -14,6 +14,6 @@ fileName=$(date -u '+%Y-%m-%d_%H' -d "-2hour")
 echo "Sqooping DONE."
 
 ind=$(date -u '+%Y-%m-%d' -d "-2hour")
-pig -4 log4j.properties -f toEScl.pig -param INPD=${fileName} ININD=${ind}
+pig -4 log4j.properties -f toEScl.pig -param INPD=${fileName} -param ININD=${ind}
 
 echo "Indexing DONE."
