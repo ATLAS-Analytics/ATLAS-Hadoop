@@ -13,7 +13,7 @@ fileName=$(date -u '+%Y-%m-%d_%H' -d "-2hour")
 ./JobSqoopWP.sh ${startDate} ${endDate} ${fileName}
 echo "Sqooping DONE."
 
-fileName=$(date -u '+%Y-%m-%d' -d "-2hour")
+ind=$(date -u '+%Y-%m-%d' -d "-2hour")
 pig -4 log4j.properties -f toES.pig -param INPD=${fileName} ININD=${ind}
 
 echo "Indexing DONE."
