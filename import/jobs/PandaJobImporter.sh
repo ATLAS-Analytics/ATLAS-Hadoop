@@ -7,8 +7,8 @@ echo "  *******************************  importing jobs table  *****************
 
 cd /afs/cern.ch/user/i/ivukotic/ATLAS-Hadoop/import/jobs/
 
-startDate=$(date -u '+%Y-%m-%d %T' -d "-2hour")
-endDate=$(date -u '+%Y-%m-%d %T' -d "-1hour")
+startDate=$(date -u '+%Y-%m-%d %H:00:00' -d "-2hour")
+endDate=$(date -u '+%Y-%m-%d %H:00:00' -d "-1hour")
 fileName=$(date -u '+%Y-%m-%d_%H' -d "-2hour")
 ./JobSqoopWP.sh "${startDate}" "${endDate}" "${fileName}"
 echo "Sqooping DONE."
