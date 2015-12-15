@@ -1,0 +1,125 @@
+curl -XDELETE aianalytics01.cern.ch:9200/_template/jobs_archive
+curl -XDELETE 'aianalytics01.cern.ch:9200/jobs_archive*'
+
+curl -XPOST 'http://aianalytics01.cern.ch:9200/_template/jobs_archive' -d '{
+    "template" : "jobs_archive*",
+    "settings" : {
+        "number_of_shards" : 5,
+        "number_of_replicas" : 1
+    },
+    "mappings" : {
+        "jobs_data" : {
+            "_source" : { "enabled" : true },
+            "properties" : {
+                "atlasrelease" : { "type" : "string", "index" : "not_analyzed" },
+                "cloud" : { "type" : "string", "index" : "not_analyzed" },
+                "cmtconfig" : { "type" : "string", "index" : "not_analyzed" },
+                "commandtopilot" : { "type" : "string", "index" : "not_analyzed" },
+                "computingelement" : { "type" : "string", "index" : "not_analyzed" },
+                "computingsite" : { "type" : "string", "index" : "not_analyzed" },
+                "countrygroup" : { "type" : "string", "index" : "not_analyzed" },
+                "cpuconsumptionunit" : { "type" : "string", "index" : "not_analyzed" },
+                "cpuconversion" : { "type" : "string", "index" : "not_analyzed" },
+                "creationhost" : { "type" : "string", "index" : "not_analyzed" },
+                "ddmerrordiag" : { "type" : "string", "index" : "not_analyzed" },
+                "destinationdblock" : { "type" : "string", "index" : "not_analyzed"},
+                "destinationse" : { "type" : "string", "index" : "not_analyzed" },
+                "dispatchdblock" : { "type" : "string", "index" : "not_analyzed" },
+                "exeerrordiag" : { "type" : "string", "index" : "not_analyzed" },
+                "homepackage" : { "type" : "string", "index" : "not_analyzed" },
+                "inputfileproject" : { "type" : "string", "index" : "not_analyzed"},
+                "inputfiletype" : { "type" : "string", "index" : "not_analyzed"},
+                "ipconnectivity" : { "type" : "string", "index" : "not_analyzed"},
+                "jobdispatchererrordiag" : { "type" : "string", "index" : "not_analyzed" },
+                "jobname" : { "type" : "string", "index" : "not_analyzed" },
+                "jobstatus" : { "type" : "string", "index" : "not_analyzed" },
+                "lockedby" : { "type" : "string", "index" : "not_analyzed" },
+                "maxcpuunit" : { "type" : "string", "index" : "not_analyzed" },
+                "modificationhost" : { "type" : "string", "index" : "not_analyzed" },
+                "piloterrordiag" : { "type" : "string", "index" : "not_analyzed" },
+                "pilotid" : { "type" : "string", "index" : "not_analyzed" },
+                "pilottiming" : { "type" : "string", "index" : "not_analyzed" },
+                "processingtype" : { "type" : "string", "index" : "not_analyzed" },
+                "proddblock" : { "type" : "string", "index" : "not_analyzed" },
+                "prodserieslabel" : { "type" : "string", "index" : "not_analyzed" },
+                "prodsourcelabel" : { "type" : "string", "index" : "not_analyzed" },
+                "produserid" : { "type" : "string", "index" : "not_analyzed" },
+                "produsername" : { "type" : "string", "index" : "not_analyzed" },
+                "schedulerid" : { "type" : "string", "index" : "not_analyzed" },
+                "sourcesite" : { "type" : "string", "index" : "not_analyzed" },
+                "specialhandling" : { "type" : "string", "index" : "not_analyzed" },
+                "taskbuffererrordiag" : { "type" : "string", "index" : "not_analyzed" },
+                "transfertype" : { "type" : "string", "index" : "not_analyzed" },
+                "transformation" : { "type" : "string", "index" : "not_analyzed" },
+                "vo" : { "type" : "string", "index" : "not_analyzed" },
+                "workinggroup" : { "type" : "string", "index" : "not_analyzed" },
+                "host" : { "type" : "string", "index" : "not_analyzed" },
+                "message" : { "type" : "string", "index" : "not_analyzed" },
+                "transexitcode" : { "type" : "string", "index" : "not_analyzed"},
+                "assignedpriority" : { "type" : "integer"},
+                "attemptnr" : { "type" : "integer"},
+                "brokerageerrorcode" : { "type" : "integer"},
+                "corecount" : { "type" : "integer"},
+                "cpuconsumptiontime" : { "type" : "long"},
+                "currentpriority" : { "type" : "integer"},
+                "ddmerrorcode" : { "type" : "integer"},
+                "exeerrorcode" : { "type" : "integer"},
+                "inputfilebytes" : { "type" : "long"},
+                "jobdefinitionid" : { "type" : "long"},
+                "jobdispatchererrorcode" : { "type" : "long"},
+                "jobdispatchererrordiag" : { "type" : "string", "index" : "not_analyzed" },
+                "jobexecutionid" : { "type" : "long"},
+                "jobsetid" : { "type" : "long"},
+                "maxattempt" : { "type" : "integer"},
+                "maxcpucount" : { "type" : "long"},
+                "maxdiskcount" : { "type" : "long"},
+                "minramcount" : { "type" : "long"},
+                "nevents" : { "type" : "long"},
+                "ninputdatafiles" : { "type" : "integer"},
+                "noutputdatafiles" : {"type" : "integer"},
+                "outputfilebytes" : { "type" : "long" },
+                "pandaid" : { "type" : "long" },
+                "piloterrorcode" : { "type" : "integer" },
+                "superrorcode" : {  "type" : "integer" },
+                "taskbuffererrorcode" : { "type" : "integer"},
+                "taskid" : { "type" : "long" },
+                "wall_time" : { "type" : "long" },
+                "job_efficiency" : { "type" : "float" },
+                "queue_time" : { "type" : "long"},
+                "timegetjob" : { "type" : "long"},
+                "timestagein" : { "type" : "long"},
+                "timeexe" : {"type" : "long"},
+                "timestageout" : { "type" : "long"},
+                "timesetup" : { "type" : "long" }
+            }
+        }
+    }
+}'
+
+
+
+
+
+
+
+{
+  "template" : "jobsarchived_20*",
+  "settings" : {
+    "analysis" : {
+      "analyzer": {
+        "lowercase_whitespace": {
+          "type": "custom",
+          "tokenizer":  "whitespace",
+          "filter": ["lowercase"]
+        }
+      }
+    }
+  },
+  "mappings" : {
+    "_default_" : {
+        "properties" : {
+          
+        }
+      }
+    }
+}
