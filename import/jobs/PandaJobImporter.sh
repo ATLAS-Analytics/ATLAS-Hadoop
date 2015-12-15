@@ -10,10 +10,10 @@ cd /afs/cern.ch/user/i/ivukotic/ATLAS-Hadoop/import/jobs/
 startDate=$(date -u '+%Y-%m-%d %T' -d "-2hour")
 endDate=$(date -u '+%Y-%m-%d %T' -d "-1hour")
 fileName=$(date -u '+%Y-%m-%d_%H' -d "-2hour")
-./JobSqoopWP.sh ${startDate} ${endDate} ${fileName}
+./JobSqoopWP.sh "${startDate}" "${endDate}" "${fileName}"
 echo "Sqooping DONE."
 
 ind=$(date -u '+%Y-%m-%d' -d "-2hour")
-pig -4 log4j.properties -f toES.pig -param INPD=${fileName} ININD=${ind}
+pig -4 log4j.properties -f toEScl.pig -param INPD=${fileName} ININD=${ind}
 
 echo "Indexing DONE."
