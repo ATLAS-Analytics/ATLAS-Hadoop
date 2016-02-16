@@ -10,5 +10,5 @@ echo "\n-------------------------------------------------------------------"
 
 echo "check the yesterday's backup\n"
 Yest=$(date +%Y-%m-%d -d "-1days")
-curl -XGET http://atlas-kibana.mwt2.org:9200/_snapshot/my_backup/snapshot_${Yest}
+curl -XGET http://atlas-kibana.mwt2.org:9200/_snapshot/my_backup/${Yest}
 
