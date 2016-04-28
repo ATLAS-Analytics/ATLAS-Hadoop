@@ -14,7 +14,7 @@ SET pig.noSplitCombination TRUE;
 define EsStorage org.elasticsearch.hadoop.pig.EsStorage('es.nodes=http://cl-analytics.mwt2.org:9200','es.mapping.id=jeditaskid');
 
 
-PAN = LOAD '/atlas/analytics/panda/tasks/$INPD' USING AvroStorage();
+PAN = LOAD '/atlas/analytics/jedi/tasks/$INPD' USING AvroStorage();
 --DESCRIBE PAN;
 
 --L = LIMIT PAN 1000; --dump L;
