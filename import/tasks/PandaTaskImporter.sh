@@ -17,7 +17,7 @@ echo "start date: ${startDate}"
 echo "end date: ${endDate}"  
 echo "file name: ${fileName}"  
 echo "index : ${ind}"  
-./JobTaskSqoopWP.sh "${startDate}" "${endDate}" "${fileName}"
+./JediTaskSqoopWP.sh "${startDate}" "${endDate}" "${fileName}"
 echo "Sqooping DONE."
 
 #pig -4 log4j.properties -f toEScl.pig -param INPD=${fileName} -param ININD=${ind}
