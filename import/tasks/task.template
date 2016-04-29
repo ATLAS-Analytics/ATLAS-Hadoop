@@ -69,7 +69,16 @@ curl -XPOST 'http://cl-analytics.mwt2.org:9200/_template/tasks_archive' -d '{
                 "amiflag_old" : { "type" : "string", "index" : "not_analyzed" },
                 "amiflag" : { "type" : "integer" },
                 "nucleus" : { "type" : "string", "index" : "not_analyzed" },
-                "baseramcount" : { "type" : "long" }
+                "baseramcount" : { "type" : "long" },
+                "lockedtime" :{ "type" : "date" },
+                "statechangetime" :{ "type" : "date" },
+                "throttledtime" :{ "type" : "date" },
+                "assessmenttime" :{ "type" : "date" },
+                "creationdate" :{ "type" : "date" },
+                "modificationtime" :{ "type" : "date" },
+                "starttime" :{ "type" : "date" },
+                "endtime" :{ "type" : "date" },
+                "frozentime" :{ "type" : "date" }
             }
         }
     }
