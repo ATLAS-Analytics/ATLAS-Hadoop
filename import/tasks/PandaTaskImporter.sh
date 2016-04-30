@@ -20,7 +20,6 @@ echo "index : ${ind}"
 ./JediTaskSqoopWP.sh "${startDate}" "${endDate}" "${fileName}"
 echo "Sqooping DONE."
 
-fileName=2016_03
 hdfs dfs -get /atlas/analytics/jedi/tasks/${fileName} /tmp/ivukotic/.
 
 IN=''
