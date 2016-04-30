@@ -20,7 +20,7 @@ echo "index : ${ind}"
 ./JediTaskSqoopWP.sh "${startDate}" "${endDate}" "${fileName}"
 echo "Sqooping DONE."
 
-
+fileName=2016_03
 hdfs dfs -get /atlas/analytics/jedi/tasks/${fileName} /tmp/ivukotic/.
 
 IN=''
@@ -31,11 +31,11 @@ done
 echo $IN
 java -jar ~/avro-tools-1.8.0.jar concat $IN /tmp/ivukotic/$fileName.avro
 
-gsutil cp /tmp/ivukotic/${fileName}.avro gs://panda_task_data/${fileName}.avro
+/afs/cern.ch/user/i/ivukotic/google-cloud-sdk/bin/gsutil cp /tmp/ivukotic/${fileName}.avro gs://panda_task_data/${fileName}.avro
 rm -rf /tmp/ivukotic/${fileName}*
 echo "Uploaded to Google Storage"
 
-bq  load --source_format AVRO panda_dataset.tasks  gs://panda_task_data/${fileName}.avro
+/afs/cern.ch/user/i/ivukotic/google-cloud-sdk/bin/bq  load --source_format AVRO panda_dataset.tasks  gs://panda_task_data/${fileName}.avro
 echo "loading into Google BigQuery"
 
 
