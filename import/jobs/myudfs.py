@@ -14,7 +14,7 @@ def deriveTimes(origString):
         return (0,0,0,0,0)
     times = origString.split('|')
     if len(times)==4: times.append(0)
-    return (int(times[0]),int(times[1]),int(times[2]),int(times[3]),int(times[4]))
+    return (int(float(times[0])),int(float(times[1])),int(float(times[2])),int(float(times[3])),int(float(times[4])))
 
     
 

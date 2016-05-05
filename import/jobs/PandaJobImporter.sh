@@ -20,5 +20,26 @@ echo "index : ${ind}"
 ./JobSqoopWP.sh "${startDate}" "${endDate}" "${fileName}"
 echo "Sqooping DONE."
 
+
+hdfs dfs -get "/atlas/analytics/panda/jobs/${fileName}" /tmp/ivukotic/.
+
+IN=''
+for f in "/tmp/ivukotic/${fileName}/p*"
+do
+    IN=(${IN} $f)
+done
+echo $IN
+java -jar ~/avro-tools-1.8.0.jar concat $IN /tmp/ivukotic/$fileName.avro
+
+/afs/cern.ch/user/i/ivukotic/google-cloud-sdk/bin/gsutil cp /tmp/ivukotic/${fileName}.avro gs://panda_job_data/${fileName}.avro
+rm -rf /tmp/ivukotic/${fileName}*
+echo "Uploaded to Google Storage"
+
+/afs/cern.ch/user/i/ivukotic/google-cloud-sdk/bin/bq  load --source_format AVRO panda_dataset.jobs  gs://panda_job_data/${fileName}.avro
+echo "Loaded into Google BigQuery"
+
+
+
 pig -4 log4j.properties -f toEScl.pig -param INPD=${fileName} -param ININD=${ind}
 echo "Indexing DONE."
+
