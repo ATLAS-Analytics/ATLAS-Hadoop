@@ -1,7 +1,7 @@
 #!/bin/bash
 echo '--------------------'
 date
-a=$(curl cl-analytics.mwt2.org:9200/_cluster/health)
+a=$(curl -s cl-analytics.mwt2.org:9200/_cluster/health)
 y=$(echo $a | grep 'yellow')
 r=$(echo $a | grep 'red')
 g=$(echo $a | grep 'green')
