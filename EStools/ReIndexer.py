@@ -32,9 +32,7 @@ destination=['faxcost-2016.04']
 for source in sources:
     print 'doing:', source
     try:
-        res = helpers.bulk(es, source, destination, raise_on_exception=True)
-        print (i.name, "\t inserted:",res[0], '\tErrors:',res[1])
-        aLotOfData=[]
+        res = helpers.reindex(es, source, destination, raise_on_exception=True)
     except es_exceptions.ConnectionError as e:
         print 'ConnectionError ', e
     except es_exceptions.TransportError as e:
