@@ -26,21 +26,14 @@ es = GetESConnection(lastReconnectionTime)
 while (not es):
     es = GetESConnection(lastReconnectionTime)
 
-sources=['faxcost-2016.4.27','faxcost-2016.4.28']
-destination=['faxcost-2016.04']
+sources=[]
+for d in range(1:32):
+    sources.append( 'faxcost-2016.1.'+str(d) )
+    
+destination=['faxcost-2016.01']
 
-for source in sources:
-    print 'doing:', source
-    try:
-        res = helpers.reindex(es, source, destination, raise_on_exception=True)
-    except es_exceptions.ConnectionError as e:
-        print 'ConnectionError ', e
-    except es_exceptions.TransportError as e:
-        print 'TransportError ', e
-    except helpers.BulkIndexError as e:
-        print e[0]
-        print len(e[1])
-    except:
-        print ('Something seriously wrong happened. ', sys.exc_info()[0])
+for s in sources:
+    print(s)
+    res = helpers.reindex(es, s, destination)
 
 print 'All done.'
