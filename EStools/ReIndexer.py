@@ -7,6 +7,8 @@ from datetime import datetime
 from elasticsearch import Elasticsearch, exceptions as es_exceptions
 from elasticsearch import helpers
 
+lastReconnectionTime=0
+
 def GetESConnection(lastReconnectionTime):
     if ( time.time()-lastReconnectionTime < 60 ): 
         return
