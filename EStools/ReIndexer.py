@@ -27,10 +27,10 @@ while (not es):
     es = GetESConnection(lastReconnectionTime)
 
 sources=[]
-for d in range(1:32):
+for d in range(1,32):
     sources.append( 'faxcost-2016.1.'+str(d) )
-    
-destination=['faxcost-2016.01']
+
+destination='faxcost-2016.01'
 
 for s in sources:
     print(s)
