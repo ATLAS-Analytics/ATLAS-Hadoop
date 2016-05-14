@@ -1,36 +1,17 @@
 #!/usr/bin/env python
 
 import os, sys, time
-import requests
 
 from datetime import datetime
-from elasticsearch import Elasticsearch, exceptions as es_exceptions
-from elasticsearch import helpers
+from elasticsearch import Elasticsearch, RequestsHttpConnection,  exceptions as es_exceptions, helpers
 
-lastReconnectionTime=0
-
-def GetESConnection(lastReconnectionTime):
-    if ( time.time()-lastReconnectionTime < 60 ): 
-        return
-    lastReconnectionTime=time.time()
-    print "make sure we are connected right..."
-    res = requests.get('http://cl-analytics.mwt2.org:9200')
-    print(res.content)
-    
-    es = Elasticsearch([{'host':'cl-analytics.mwt2.org', 'port':9200}])
-    return es
-
-
-
-es = GetESConnection(lastReconnectionTime)
-while (not es):
-    es = GetESConnection(lastReconnectionTime)
+es = Elasticsearch([{'host':'atlas-kibana.mwt2.org', 'port':9200},{'host':'cl-analytics.mwt2.org', 'port':9200}], sniff_on_start=True, sniff_on_connection_fail=True, sniffer_timeout=60, timeout=600)
 
 sources=[]
-for d in range(1,32):
+for d in range(1,11):
     sources.append( 'faxcost-2016.1.'+str(d) )
 
-destination='faxcost-2016.01'
+destination='faxcost-2016.01.01-10'
 
 for s in sources:
     print(s)
