@@ -1,7 +1,7 @@
-curl -XDELETE aianalytics01.cern.ch:9200/_template/jobs_archive
-curl -XDELETE 'aianalytics01.cern.ch:9200/jobs_archive*'
+curl -XDELETE cl-analytics.mwt2.org:9200/_template/jobs_archive
+curl -XDELETE 'cl-analytics.mwt2.org:9200/jobs_archive*'
 
-curl -XPOST 'http://aianalytics01.cern.ch:9200/_template/jobs_archive' -d '{
+curl -XPOST 'http://cl-analytics.mwt2.org:9200/_template/jobs_archive' -d '{
     "template" : "jobs_archive*",
     "settings" : {
         "number_of_shards" : 5,
@@ -90,7 +90,11 @@ curl -XPOST 'http://aianalytics01.cern.ch:9200/_template/jobs_archive' -d '{
                 "timestagein" : { "type" : "long"},
                 "timeexe" : {"type" : "long"},
                 "timestageout" : { "type" : "long"},
-                "timesetup" : { "type" : "long" }
+                "timesetup" : { "type" : "long" },
+                "nucleus" : { "type" : "string", "index" : "not_analyzed"},
+                "eventservice" : { "type" : "integer" },
+                "failedattempt" : { "type" : "integer" },
+                "hs06sec" : { "type" : "long" }
             }
         }
     }
