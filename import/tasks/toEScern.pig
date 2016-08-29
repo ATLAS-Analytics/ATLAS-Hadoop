@@ -12,7 +12,7 @@ REGISTER '/afs/cern.ch/user/i/ivukotic/ATLAS-Hadoop/import/elasticsearch-hadoop-
 SET default_parallel 5;
 SET pig.noSplitCombination TRUE;
 
-define EsStorage org.elasticsearch.hadoop.pig.EsStorage('es.nodes=http://es-atlas.cern.ch:9203', 'es.net.ssl.keystore.location=/usr/lib/jvm/java-1.7.0-oracle.x86_64/jre/lib/security/cacerts', 'es.net.ssl=true', 'es.net.http.auth.user=es-atlas', 'es.net.http.auth.pass=v~$&<J8/cG9]*eQ@','es.mapping.id=jeditaskid');
+define EsStorage org.elasticsearch.hadoop.pig.EsStorage('es.nodes=https://es-atlas.cern.ch:9203', 'es.net.ssl.keystore.location=/usr/lib/jvm/java-1.7.0-oracle.x86_64/jre/lib/security/cacerts', 'es.net.ssl=true', 'es.net.http.auth.user=es-atlas', 'es.net.http.auth.pass=v~$&<J8/cG9]*eQ@','es.mapping.id=jeditaskid');
 
 
 PAN = LOAD '/atlas/analytics/jedi/tasks/$INPD' USING AvroStorage();
