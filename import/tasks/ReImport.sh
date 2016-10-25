@@ -1,7 +1,7 @@
 year=2016
 month=08
 ind=${year}-${month}
-for d in `seq 11 31`;
+for d in `seq 13 31`;
     do
         day=$(printf %02d $d)
         for h in `seq 0 23`;

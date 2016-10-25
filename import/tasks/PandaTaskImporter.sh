@@ -20,27 +20,27 @@ echo "index : ${ind}"
 ./JediTaskSqoopWP.sh "${startDate}" "${endDate}" "${fileName}"
 echo "Sqooping DONE."
 
-hdfs dfs -get /atlas/analytics/jedi/tasks/${fileName} /tmp/ivukotic/.
+#hdfs dfs -get /atlas/analytics/jedi/tasks/${fileName} /tmp/ivukotic/.
 
-IN=''
-for f in /tmp/ivukotic/${fileName}/p*
-do
-    IN=(${IN} $f)
-done
-echo $IN
-java -jar ~/avro-tools-1.8.0.jar concat $IN /tmp/ivukotic/$fileName.avro
+#IN=''
+#for f in /tmp/ivukotic/${fileName}/p*
+#do
+#    IN=(${IN} $f)
+#done
+#echo $IN
+#java -jar ~/avro-tools-1.8.0.jar concat $IN /tmp/ivukotic/$fileName.avro
 
-/afs/cern.ch/user/i/ivukotic/google-cloud-sdk/bin/gsutil cp /tmp/ivukotic/${fileName}.avro gs://panda_task_data/${fileName}.avro
-rm -rf /tmp/ivukotic/${fileName}*
-echo "Uploaded to Google Storage"
+#/afs/cern.ch/user/i/ivukotic/google-cloud-sdk/bin/gsutil cp /tmp/ivukotic/${fileName}.avro gs://panda_task_data/${fileName}.avro
+#rm -rf /tmp/ivukotic/${fileName}*
+#echo "Uploaded to Google Storage"
 
-/afs/cern.ch/user/i/ivukotic/google-cloud-sdk/bin/bq  load --source_format AVRO panda_dataset.tasks  gs://panda_task_data/${fileName}.avro
-echo "loading into Google BigQuery"
+#/afs/cern.ch/user/i/ivukotic/google-cloud-sdk/bin/bq  load --source_format AVRO panda_dataset.tasks  gs://panda_task_data/${fileName}.avro
+#echo "loading into Google BigQuery"
 
 
 
 pig -4 log4j.properties -f toEScl.pig -param INPD=${fileName} -param ININD=${ind}
 echo "Indexing in CL DONE."
 
-pig -4 log4j.properties -f toEScern.pig -param INPD=${fileName} -param ININD=${ind}
-echo "Indexing in CERN DONE."
+#pig -4 log4j.properties -f toEScern.pig -param INPD=${fileName} -param ININD=${ind}
+#echo "Indexing in CERN DONE."
