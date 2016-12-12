@@ -16,7 +16,34 @@ def deriveTimes(origString):
     if len(times)==4: times.append(0)
     return (int(float(times[0])),int(float(times[1])),int(float(times[2])),int(float(times[3])),int(float(times[4])))
 
-    
+@outputSchema('tuple( dbTime:float, dbData:int, workDirSize:int, rest:chararray )')    
+def splitJobmetrics(origString):
+    if origString is None:
+        return (0,0,0,None)
+    parts = origString.split(' ')
+    rest = ''
+    dbTime=None
+    dbData=None
+    workDirSize=None
+    for p in parts:
+        if  not '=' in p:
+            rest += p + ' '
+            continue
+        k,v=p.split('=')
+        if k=='coreCount' or k=='nEvents': continue
+        if k=='dbTime':
+            dbTime=float(v)
+            continue
+        if k=='dbData':
+            dbData=int(v)
+            continue
+        if k=='workDirSize':
+            workDirSize=int(v)
+            continue
+        rest += p +' '
+    rest=rest.strip()
+    if len(rest)==0: rest=None
+    return (dbTime,dbData,workDirSize,rest)
 
 @outputSchema('tuple( walltime:int, cpueff:float, queue_time:int)')
 def deriveDurationAndCPUeff(CREATIONTIME,STARTTIME,ENDTIME,CPUCONSUMPTIONTIME):

@@ -6,7 +6,8 @@ REGISTER '/usr/lib/pig/lib/jython-*.jar';
 REGISTER '/usr/lib/pig/lib/snappy-*.jar';
 
 --REGISTER '/usr/lib/pig/lib/elasticsearch-hadoop-*.jar';
-REGISTER '/afs/cern.ch/user/i/ivukotic/ATLAS-Hadoop/import/elasticsearch-hadoop-pig-2.3.2.jar'
+--REGISTER '/afs/cern.ch/user/i/ivukotic/ATLAS-Hadoop/import/elasticsearch-hadoop-pig-2.3.2.jar'
+REGISTER '/afs/cern.ch/user/i/ivukotic/ATLAS-Hadoop/import/elasticsearch-hadoop-5.0.2/dist/elasticsearch-hadoop-pig-5.0.2.jar'
 
 SET default_parallel 5;
 SET pig.noSplitCombination TRUE;
