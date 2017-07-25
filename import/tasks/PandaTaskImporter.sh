@@ -39,7 +39,7 @@ echo "Sqooping DONE."
 
 
 
-pig -4 log4j.properties -f toEScl.pig -param INPD=${fileName} -param ININD=${ind}
+pig -4 log4j.properties -f TasksToESuc.pig -param INPD=${fileName} -param ININD=${ind}
 echo "Indexing in CL DONE."
 
 #pig -4 log4j.properties -f toEScern.pig -param INPD=${fileName} -param ININD=${ind}
