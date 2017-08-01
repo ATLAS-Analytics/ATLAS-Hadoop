@@ -21,7 +21,7 @@ filt_msg = FILTER message by EVENT_TYPE=='transfer-done';
 -- L = LIMIT filt_msg 10; dump L;
 
 dec_msg = FOREACH filt_msg GENERATE decode_json(PAYLOAD)  as payload;
-rdec_msg = FOREACH dec_msg GENERATE FLATTEN(myfuncs.splitPayload(payload)) as (protocol:chararray, dst_rse:chararray, started_at:chararray, scope:chararray, transferred_at:chararray, src_type:chararray, dst_type:chararray, submitted_at:chararray, name:chararray, request_id:chararray, bytes:long, activity:chararray, src_rse:chararray) ;
+rdec_msg = FOREACH dec_msg GENERATE FLATTEN(myfuncs.splitPayload(payload)) as (protocol:chararray, dst_rse:chararray, started_at:chararray, scope:chararray, transferred_at:chararray, src_type:chararray, dst_type:chararray, submitted_at:chararray, name:chararray, request_id:chararray, bytes:long, activity:chararray, src_rse:chararray, dst:chararray, src:chararray) ;
 
 -- L = LIMIT rdec_msg 100000; dump L;
 
