@@ -1,6 +1,6 @@
 from datetime import datetime
 import time
-import requests
+import urllib2
 try: import simplejson as json
 except ImportError: import json
 
@@ -8,8 +8,10 @@ site_map={}
 
 def loadMapping():
     try:
-        r=requests.get('http://atlas-agis-api.cern.ch/request/site/query/list/?json&vo_name=atlas&state=ACTIVE')
-        res = r.json()
+        url='http://atlas-agis-api.cern.ch/request/site/query/list/?json&vo_name=atlas&state=ACTIVE'
+        res=json.load(urllib2.urlopen(url))
+        #r=requests.get(url)
+        #res = r.json()
         for s in res:
             site_name=s["rc_site"]
             for rse in s['ddmendpoints']:
