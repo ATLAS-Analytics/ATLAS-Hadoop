@@ -12,6 +12,7 @@ startDate=$(date -u '+%Y-%m-%d' -d "-12hour")
 #ind=$(date -u '+%Y-%m-%d' -d "-2hour")
 echo "start date: ${startDate}"  
 #echo "index : ${ind}"  
+python preloading.py
 
 pig -4 log4j.properties -f fts_to_ES_uc.pig -param ININD=${startDate}
 echo "DONE."

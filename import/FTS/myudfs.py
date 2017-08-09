@@ -1,28 +1,12 @@
 from datetime import datetime
 import time
-import urllib2
-try: import simplejson as json
-except ImportError: import json
+import pickle
 
 site_map={}
 
-def loadMapping():
-    try:
-        url='http://atlas-agis-api.cern.ch/request/site/query/list/?json&vo_name=atlas&state=ACTIVE'
-        res=json.load(urllib2.urlopen(url))
-        #r=requests.get(url)
-        #res = r.json()
-        for s in res:
-            site_name=s["rc_site"]
-            for rse in s['ddmendpoints']:
-                site_map[rse] = site_name
-        print('Sites reloaded.')
-    except:
-        print ("Could not get sites from AGIS. Exiting...")
-        print ("Unexpected error: ", str(sys.exc_info()[0]))
-
 def siteFromRSE(RSE):
-    if len(site_map)==0: loadMapping()
+    if len(site_map)==0:
+        site_map = pickle.load( open( "mapping.p", "rb" ) )
     if RSE in site_map:
         return (site_map[RSE])
     return "unknown"
