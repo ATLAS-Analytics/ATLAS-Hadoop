@@ -6,7 +6,7 @@ site_map={}
 
 def siteFromRSE(RSE):
     if len(site_map)==0:
-        site_map = pickle.load( open( "mapping.p", "rb" ) )
+        site_map = pickle.load( open( "/afs/cern.ch/user/i/ivukotic/public/mapping.p", "rb" ) )
     if RSE in site_map:
         return (site_map[RSE])
     return "unknown"

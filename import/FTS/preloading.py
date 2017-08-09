@@ -18,5 +18,5 @@ except:
     print ("Could not get sites from AGIS. Exiting...")
     print ("Unexpected error: ", str(sys.exc_info()[0]))
 
-pickle.dump(site_map,  open( "mapping.p", "wb" ))
+pickle.dump(site_map,  open( "/afs/cern.ch/user/i/ivukotic/public/mapping.p", "wb" ))
 print("AGIS data saved.")
