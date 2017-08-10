@@ -7,6 +7,7 @@ except ImportError: import json
 site_map={}
 
 try:
+    global site_map
     url='http://atlas-agis-api.cern.ch/request/site/query/list/?json&vo_name=atlas&state=ACTIVE'
     res=json.load(urllib2.urlopen(url))
     for s in res:
