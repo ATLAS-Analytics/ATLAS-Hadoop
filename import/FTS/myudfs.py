@@ -5,6 +5,7 @@ import pickle
 site_map={}
 
 def siteFromRSE(RSE):
+    global site_map
     if len(site_map)==0:
         site_map = pickle.load( open( "/afs/cern.ch/user/i/ivukotic/public/mapping.p", "rb" ) )
     if RSE in site_map:
