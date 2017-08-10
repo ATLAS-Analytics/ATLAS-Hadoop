@@ -20,4 +20,4 @@ except:
     print ("Unexpected error: ", str(sys.exc_info()[0]))
 
 pickle.dump(site_map,  open( "/afs/cern.ch/user/i/ivukotic/public/mapping.p", "wb" ))
-print("AGIS data saved.")
+print("AGIS data saved.")     
