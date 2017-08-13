@@ -11,8 +11,8 @@ echo "  *******************************  importing parent/child table  *********
 
 cd /afs/cern.ch/user/i/ivukotic/ATLAS-Hadoop/import/jobsEnrichment/
 
-startDate=$(date -u '+%Y-%m-%d %H:00:00' -d "-48hour")
-endDate=$(date -u '+%Y-%m-%d %H:00:00' -d "-24hour")
+startDate=$(date -u '+%Y-%m-%d' -d "-48hour")
+endDate=$(date -u '+%Y-%m-%d' -d "-24hour")
 
 echo "start date: ${startDate}"  
 echo "end date: ${endDate}"  
