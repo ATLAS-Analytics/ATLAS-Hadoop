@@ -21,6 +21,11 @@ echo "end date: ${endDate}"
 ./ParentSqoopWP.sh "${startDate}" "${endDate}"
 echo "Sqooping DONE."
 
+#pyspark indexer.py
+
+echo "copy file to UC. Will actually index it directly there. Check how expesive is modifying docs."
+hdfs dfs -getmerge /atlas/analytics/job_parents/${startDate} /tmp/${startDate}
+scp /tmp/${startDate} uct2-collectd.mwt2.org:/tmp/.
 
 #hdfs dfs -get "/atlas/analytics/panda/jobs/${fileName}" /tmp/ivukotic/.
 
