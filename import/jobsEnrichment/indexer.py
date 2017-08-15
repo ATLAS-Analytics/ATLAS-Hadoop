@@ -13,23 +13,29 @@ sc = SparkContext(conf=conf)
 
 #   |JEDITASKID|OLDPANDAID|NEWPANDAID|INS_UTC_TSTAMP|RELATIONTYPE|ORIGINPANDAID|
 #   |  11493332|3541383031|3541402570| 1501538572000|       retry|   3532031978|
+
 df = sqlContext.read.format("com.databricks.spark.avro").load("hdfs://analytix//atlas/analytics/job_parents/test-8")
 print(df.columns)
 df.show()
 
-print(df.select('RELATIONTYPE').distinct().rdd.map(lambda r: r[0]).collect())
+# rather useless give next command
+
+# print(df.select('RELATIONTYPE').distinct().rdd.map(lambda r: r[0]).collect())
 
 result = df.groupBy('RELATIONTYPE').count().collect() 
-# [Row(RELATIONTYPE=u'merge', count=3515337), Row(RELATIONTYPE=u'jobset_id', count=44572), Row(RELATIONTYPE=u'es_merge', count=17350), Row(RELATIONTYPE=u'retry', count=5509937), Row(RELATIONTYPE=u'jobset_retry', count=22671)]
 print(result)
+# [Row(RELATIONTYPE=u'merge', count=3515337), Row(RELATIONTYPE=u'jobset_id', count=44572), Row(RELATIONTYPE=u'es_merge', count=17350), Row(RELATIONTYPE=u'retry', count=5509937), Row(RELATIONTYPE=u'jobset_retry', count=22671)]
+
 df1 = df.filter("RELATIONTYPE = 'retry'")
 
 gOLD=df1.groupby('OLDPANDAID')
 
 print(df1.count())
-print(len(gOLD.count().collect()))
-#5175273  - there are more than 1...
+# some pandaIDs appear in more than one place
 
+ns = gOLD.count()
+mu = ns.filter("count > 1")
+mu.show()
 
 # writing to file. csv will work fine.
 
