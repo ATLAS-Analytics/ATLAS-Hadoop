@@ -97,31 +97,6 @@ job_query = {
                 
 }
 
-# def simple_update(jobs):
-#     global df
-#     df = df.reset_index(drop=True)
-#     toClean = []
-#     data = []     
-#     for j in jobs:
-#         pid=j['pid']
-#         ind=j['ind']
-#         found = df[df.old_pid == pid]
-#         if found.shape[0]==0: continue
-#         if found.shape[0]>1:
-#             print(found)
-#         d = {
-#             '_op_type': 'update',
-#             '_index': ind,
-#             '_type': 'jobs_data',
-#             '_id': pid,
-#             'doc': {'child_ids': found.new_pid.tolist()}
-#         }    
-#         data.append(d)
-#         toClean+=found.index.tolist()
-#     print('df:',df.shape[0], 'found:', len(data))
-#     df=df.drop(df.index[toClean])
-#     res = bulk(client=es, actions=data, stats_only=True, timeout="5m")
-#     print(res)
 
 
 def exec_update(jobs):
@@ -140,11 +115,10 @@ def exec_update(jobs):
     for old_pid, row in jc.iterrows():
         ind = row['ind'] 
         child_id = row['new_pid']
-        print(ind,child_id)
+        # print(ind,child_id)
         if old_pid not in ma: ma[old_pid]=['',[]]
         ma[old_pid][0]=ind
         ma[old_pid][1].append(int(child_id))
-
 
     data = []
     for k, v in ma.items():
@@ -152,7 +126,7 @@ def exec_update(jobs):
             '_op_type': 'update',
             '_index': v[0],
             '_type': 'jobs_data',
-            '_id': k,
+            '_id': int(k),
             'doc': {'child_ids': v[1]}
         }    
         data.append(d)
