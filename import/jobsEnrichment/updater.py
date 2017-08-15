@@ -113,7 +113,7 @@ def simple_update(jobs):
         toClean+=found.index.tolist()
     print('df:',df.shape[0], 'found:', len(data))
     df=df.drop(df.index[toClean])
-    res = bulk(client=es, actions=data, stats_only=True, timeout="5m", size=10000)
+    res = bulk(client=es, actions=data, stats_only=True, timeout="5m")
     print(res)
 
 jobs=[]
