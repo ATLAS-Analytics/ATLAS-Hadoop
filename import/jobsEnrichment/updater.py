@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 
-# this code updates child_id info on all jobs that have been retried
+# this code updates child_ids info on all jobs that have been retried
+
+# can I see these in kibana?
+# optimizations: only non finished jobs?
+
 
 import os, sys
 from elasticsearch import Elasticsearch, helpers
@@ -21,6 +25,9 @@ del df['relation_type']
 #find min and max old pid
 min_pid = df.old_pid.min()
 max_pid = df.old_pid.max()
+
+# make index to be old_pid
+df.set_index("old_pid",inplace=True)
 
 #find oldest and newest index that should be scanned
 es = Elasticsearch([{'host':'atlas-kibana.mwt2.org', 'port':9200}],timeout=60)
@@ -90,29 +97,66 @@ job_query = {
                 
 }
 
-def simple_update(jobs):
+# def simple_update(jobs):
+#     global df
+#     df = df.reset_index(drop=True)
+#     toClean = []
+#     data = []     
+#     for j in jobs:
+#         pid=j['pid']
+#         ind=j['ind']
+#         found = df[df.old_pid == pid]
+#         if found.shape[0]==0: continue
+#         if found.shape[0]>1:
+#             print(found)
+#         d = {
+#             '_op_type': 'update',
+#             '_index': ind,
+#             '_type': 'jobs_data',
+#             '_id': pid,
+#             'doc': {'child_ids': found.new_pid.tolist()}
+#         }    
+#         data.append(d)
+#         toClean+=found.index.tolist()
+#     print('df:',df.shape[0], 'found:', len(data))
+#     df=df.drop(df.index[toClean])
+#     res = bulk(client=es, actions=data, stats_only=True, timeout="5m")
+#     print(res)
+
+
+def exec_update(jobs):
     global df
-    df = df.reset_index(drop=True)
-    toClean = []
-    data = []     
-    for j in jobs:
-        pid=j['pid']
-        ind=j['ind']
-        found = df[df.old_pid == pid]
-        if found.shape[0]==0: continue
-        if found.shape[0]>1:
-            print(found)
+    jdf=pd.DataFrame(jobs)
+    jdf.set_index('pid',inplace=True)
+    #print(jdf.head())
+    jc=jdf.join(df).dropna()
+    print('parent:', df.shape[0], '\t jobs:',jdf.shape[0], 'jcleaned:', jc.shape[0])
+    jcg=jc.groupby(jc.index)
+    cnts=jcg.count()
+    print("multiples:", cnts[cnts.new_pid>1])
+    
+    
+    ma={}
+    for old_pid, row in jc.iterrows():
+        ind = row['ind'] 
+        child_id = row['new_pid']
+        print(ind,child_id)
+        if old_pid not in ma: ma[old_pid]=['',[]]
+        ma[old_pid][0]=ind
+        ma[old_pid][1].append(int(child_id))
+
+
+    data = []
+    for k, v in ma.items():
         d = {
             '_op_type': 'update',
-            '_index': ind,
+            '_index': v[0],
             '_type': 'jobs_data',
-            '_id': pid,
-            'doc': {'child_ids': found.new_pid.tolist()}
+            '_id': k,
+            'doc': {'child_ids': v[1]}
         }    
         data.append(d)
-        toClean+=found.index.tolist()
-    print('df:',df.shape[0], 'found:', len(data))
-    df=df.drop(df.index[toClean])
+  
     res = bulk(client=es, actions=data, stats_only=True, timeout="5m")
     print(res)
 
@@ -124,33 +168,15 @@ for res in scroll:
     count += 1    
     if not count%100000: 
         print(count, ' selected:', count)    
-        simple_update(jobs)
+        exec_update(jobs)
         jobs=[]
     #print(res)
     jobs.append({"pid":int(res['_id']), "ind":res['_index']})
     #if count%5 == 1: exec_update(jobs)
     if count>10000000: break
 
-simple_update(jobs)
+exec_update(jobs)
 jobs=[]
 
 
 
-
-
-
-
-# def exec_update(jobs):
-#     global df
-#     df = df.reset_index(drop=True)
-#     print ('df:', df.shape)
-#     jdf=pd.DataFrame(jobs)
-#     jdf.set_index('pid',inplace=True)
-#     print('jdf:',jdf.shape)
-#     #print(jdf.head())
-#     j=df.join(jdf, on='old_pid', how='inner') 
-#     print(j)
-#     print('j:', j.shape)
-#     # drop ones we matched
-#     td = j.index.tolist()
-#     df = df.drop(df.index[td])
