@@ -16,7 +16,7 @@ import pandas as pd
 infile=sys.argv[1]
 print("processing input file", infile)
 
-df = pd.read_csv('/tmp/' + infile, header=None, names=['old_pid','new_pid','relation_type'])
+df = pd.read_csv( infile, header=None, names=['old_pid','new_pid','relation_type'])
 print(df.head())
 
 # leave only retries
