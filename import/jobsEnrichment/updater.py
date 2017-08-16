@@ -102,7 +102,7 @@ def exec_update(jobs):
     print('parent:', df.shape[0], '\t jobs:',jdf.shape[0], 'jcleaned:', jc.shape[0])
     jcg=jc.groupby(jc.index)
     cnts=jcg.count()
-    print("multiples:", cnts[cnts.new_pid>1])
+    # print("multiples:", cnts[cnts.new_pid>1])
     
     
     ma={}
@@ -135,14 +135,13 @@ count = 0
 for res in scroll:
     count += 1    
     if not count%100000: 
-        print(count, ' selected:', count)    
+        #print(' selected:', count)    
         exec_update(jobs)
         jobs=[]
     #print(res)
     jobs.append({"pid":int(res['_id']), "ind":res['_index']})
     #if count%5 == 1: exec_update(jobs)
-    if count>10000000: break
-
+    
 exec_update(jobs)
 jobs=[]
 
