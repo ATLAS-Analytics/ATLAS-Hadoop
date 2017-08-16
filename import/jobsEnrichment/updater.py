@@ -2,10 +2,6 @@
 
 # this code updates child_ids info on all jobs that have been retried
 
-# can I see these in kibana?
-# optimizations: only non finished jobs?
-
-
 import os, sys
 from elasticsearch import Elasticsearch, helpers
 from elasticsearch.helpers import scan, bulk
