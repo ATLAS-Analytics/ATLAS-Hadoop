@@ -23,11 +23,9 @@ echo "Sqooping DONE."
 
 #pyspark indexer.py
 
-echo "copy file to UC. Will actually index it directly there. Check how expesive is modifying docs."
-hdfs dfs -getmerge /atlas/analytics/job_parents/${startDate} /tmp/${startDate}
-scp /tmp/${startDate} uct2-collectd.mwt2.org:/tmp/.
+echo "copy file to UC. Will index it from there."
+hdfs dfs -getmerge /atlas/analytics/job_parents/${startDate} /tmp/${startDate}.update
+scp /tmp/${startDate}.update uct2-collectd.mwt2.org:/tmp/.
+rm /tmp/${startDate}.update
 
-#hdfs dfs -get "/atlas/analytics/panda/jobs/${fileName}" /tmp/ivukotic/.
-
-#pig -4 log4j.properties -f toEScl.pig -param INPD=${fileName} -param ININD=${ind}
-#echo "Indexing CL DONE."
+#echo "import DONE."

@@ -2,10 +2,6 @@
 
 # this code updates child_ids info on all jobs that have been retried
 
-# can I see these in kibana?
-# optimizations: only non finished jobs?
-
-
 import os, sys
 from elasticsearch import Elasticsearch, helpers
 from elasticsearch.helpers import scan, bulk
@@ -16,7 +12,7 @@ import pandas as pd
 infile=sys.argv[1]
 print("processing input file", infile)
 
-df = pd.read_csv('/tmp/' + infile, header=None, names=['old_pid','new_pid','relation_type'])
+df = pd.read_csv( infile, header=None, names=['old_pid','new_pid','relation_type'])
 print(df.head())
 
 # leave only retries
