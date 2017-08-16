@@ -74,12 +74,9 @@ indices = [x for x in indices if x != '']
 selected_indices=[]
 acc = False
 for i in indices:
-    if i == min_index: 
-        acc = True
-        selected_indices.append(i)
-        continue
+    if i == min_index: acc = True
     if i == max_index: acc = False
-    if acc == True:
+    if i == min_index or i== max_index or acc == True:
         selected_indices.append(i)
 
 job_indices = ''
