@@ -13,7 +13,8 @@ from elasticsearch.helpers import scan, bulk
 import numpy as np
 import pandas as pd
 
-infile='2017-08-12'
+infile=sys.argv[1]
+print("processing input file", infile)
 
 df = pd.read_csv('/tmp/' + infile, header=None, names=['old_pid','new_pid','relation_type'])
 print(df.head())
