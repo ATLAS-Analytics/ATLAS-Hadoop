@@ -84,9 +84,9 @@ job_query = {
     "size": 0,
     "_source": ["_id"],
     'query':{
-        "match_all": {}
+        #"match_all": {}
         # maybe loop over over not finished jobs
-        #    'bool':{ 'must':[  { "term": {"jobstatus": "finished" } }  ]  }
+        'bool':{ 'must_not':[  { "term": {"jobstatus": "finished" } }  ]  }
     }
                 
 }
