@@ -6,7 +6,7 @@ REGISTER /usr/lib/avro/avro-mapred.jar;
 REGISTER /usr/lib/pig/lib/json-simple-1.1.jar;
 REGISTER '/usr/lib/pig/lib/jython-*.jar';
 
-REGISTER '/afs/cern.ch/user/i/ivukotic/ATLAS-Hadoop/import/elasticsearch-hadoop-5.1.2/dist/elasticsearch-hadoop-pig-5.1.2.jar'
+REGISTER '/afs/cern.ch/user/i/ivukotic/ATLAS-Hadoop/import/elasticsearch-hadoop-6.2.2/dist/elasticsearch-hadoop-pig-6.2.2.jar'
 REGISTER 'myudfs.py' using jython as myfuncs;
 
 SET default_parallel 5;
